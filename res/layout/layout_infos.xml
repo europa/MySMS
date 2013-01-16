@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/personText"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+		android:background="@color/black_translucent"        
+        android:text="小王 13665553143" />
+
+    <ListView
+        android:id="@+id/infos"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>
