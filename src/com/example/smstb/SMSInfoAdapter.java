@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class SMSInfoAdapter extends BaseAdapter {
+	private static final String TAG="SMSInfoAdapter";
 
 	List<SMSInfo> mInfos = new ArrayList<SMSInfo>();
 	private LayoutInflater mInflater;
 	private Context mContext;
-
-	public SMSInfoAdapter(List<SMSInfo> infos, Context context) {
-		mInfos = infos;
-		mContext = context;
+	private String mName="";
+	
+	public SMSInfoAdapter(String name,Context context) {
+		mName=name;
+		mContext=context;
 	}
 
 	public int getCount() {
@@ -62,9 +65,11 @@ public class SMSInfoAdapter extends BaseAdapter {
 			view.setTag(viewHolder);
 		}
 		ViewHolder viewHolder = (ViewHolder) view.getTag();
-
-		viewHolder.phoneNum.setText(InfoUtils.getContactByPhone(mContext,mInfos
-				.get(position).getPhoneNum()));
+		if(mInfos.get(position).getType()==1){
+			viewHolder.phoneNum.setText("我");
+		}else{
+			viewHolder.phoneNum.setText(mInfos.get(position).getName());
+		}
 		viewHolder.amount.setText("");
 		viewHolder.time.setText(mInfos.get(position).getTime());
 		viewHolder.content.setText(mInfos.get(position).getContent());
@@ -76,5 +81,15 @@ public class SMSInfoAdapter extends BaseAdapter {
 		TextView amount;
 		TextView time;
 		TextView content;
+	}
+	
+	public void refreshData(){
+		mInfos=InfoUtil.getInfosByName(mName);
+		if(mInfos==null){
+			Log.i(TAG,"null");
+			return;
+		}
+		Log.i(TAG,TAG+mInfos.size());
+		notifyDataSetChanged();
 	}
 }

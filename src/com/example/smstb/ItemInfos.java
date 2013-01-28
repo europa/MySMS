@@ -6,16 +6,16 @@ import java.util.List;
 
 import android.os.Parcelable;
 
-public class ItemInfo implements Serializable{
-	private SMSInfo smsInfo;
+public class ItemInfos implements Serializable{
+	private List<SMSInfo> smsInfos;
 	private long lastTime;
 
-	public SMSInfo getSmsInfo() {
-		return  smsInfo;
+	public ArrayList<SMSInfo> getSmsInfos() {
+		return (ArrayList<SMSInfo>) smsInfos;
 	}
 
-	public void setSmsInfo(SMSInfo smsInfo) {
-		this.smsInfo = smsInfo;
+	public void setSmsInfos(List<SMSInfo> smsInfos) {
+		this.smsInfos = smsInfos;
 	}
 
 	public long getLastTime() {

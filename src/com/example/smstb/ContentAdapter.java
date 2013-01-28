@@ -16,12 +16,11 @@ import android.widget.TextView;
 
 public class ContentAdapter extends BaseAdapter {
 
-	private List<ItemInfo> mData = new ArrayList<ItemInfo>();
+	private List<ItemInfos> mData = new ArrayList<ItemInfos>();
 	private LayoutInflater mInflater;
 	private Context mContext;
 
-	public ContentAdapter(List<ItemInfo> data, Context context) {
-		mData = data;
+	public ContentAdapter( Context context) {
 		mContext = context;
 	}
 
@@ -61,8 +60,7 @@ public class ContentAdapter extends BaseAdapter {
 		}
 		ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-		viewHolder.phoneNum.setText(getContactByPhone(mData.get(position).getSmsInfos().get(0)
-				.getPhoneNum()));
+		viewHolder.phoneNum.setText(mData.get(position).getSmsInfos().get(0).getName());
 		// viewHolder.phoneNum.setText(mData.get(position).getSmsInfos().get(0).getPhoneNum());
 		viewHolder.amount.setText("(" + mData.get(position).getSmsInfos().size() + ")");
 		viewHolder.time.setText(mData.get(position).getSmsInfos().get(0).getTime());
@@ -76,17 +74,9 @@ public class ContentAdapter extends BaseAdapter {
 		TextView time;
 		TextView content;
 	}
-
-	public String getContactByPhone(String phoneNum) {
-		String name = phoneNum;
-		Uri personUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
-				phoneNum);
-		Cursor cursor = mContext.getContentResolver().query(personUri,
-				new String[] { PhoneLookup.DISPLAY_NAME }, null, null, null);
-		if (cursor.moveToFirst()) {
-			int nameId = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME);
-			name = cursor.getString(nameId);
-		}
-		return name;
+	
+	public void refreshData(){
+		mData=InfoUtil.getInfosInPerson();
+		notifyDataSetChanged();
 	}
 }
