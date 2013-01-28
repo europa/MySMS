@@ -52,7 +52,7 @@ public class InfosPersonActivity extends FragmentActivity{
 			// TODO Auto-generated method stub
 			Intent intent=new Intent();
 			intent.setClass(InfosPersonActivity.this, InfoActivity.class);
-//			intent.putExtra(Constants.INFO,mInfos.get(position));
+			intent.putExtra(Constants.INFO,(SMSInfo)smsInfoAdapter.getItem(position));
 			startActivity(intent);
 		}
 	}

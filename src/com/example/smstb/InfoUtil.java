@@ -119,41 +119,26 @@ public class InfoUtil {
 		return smsBuilder.toString();
 	}
 
-//	public static List<ItemInfo> getInfosInPerson() {
-//		List<String> names = new ArrayList<String>();
-//		List<ItemInfo> itemInfos = new ArrayList<ItemInfo>();
-//
-//		for (int i = 0; i < infos.size(); i++) {
-//			if (!names.contains(infos.get(i).getName())) {
-//				names.add(infos.get(i).getName());
-//			}
-//		}
-//		for (int i = 0; i < names.size(); i++) {
-//			List<SMSInfo> infoList = new ArrayList<SMSInfo>();
-//			ItemInfo itemInfo = new ItemInfo();
-//			for (int j = 0; j < infos.size(); j++) {
-//				if (names.get(i).equals(infos.get(j).getName())) {
-//					infoList.add(infos.get(j));
-//				}
-//			}
-//			itemInfo.setSmsInfos(infoList);
-//			itemInfo.setLastTime(infoList.get(0).getoTime());
-//			itemInfos.add(itemInfo);
-//		}
-//		return itemInfos;
-//	}
-	public static List<ItemInfo> getInfosInPerson() {
+	public static List<ItemInfos> getInfosInPerson() {
 		List<String> names = new ArrayList<String>();
-		List<ItemInfo> itemInfos = new ArrayList<ItemInfo>();
+		List<ItemInfos> itemInfos = new ArrayList<ItemInfos>();
 
 		for (int i = 0; i < infos.size(); i++) {
-			ItemInfo itemInfo=new ItemInfo();
 			if (!names.contains(infos.get(i).getName())) {
 				names.add(infos.get(i).getName());
-				itemInfo.setSmsInfo(infos.get(i));
-				itemInfo.setLastTime(infos.get(i).getoTime());
-				itemInfos.add(itemInfo);
 			}
+		}
+		for (int i = 0; i < names.size(); i++) {
+			List<SMSInfo> infoList = new ArrayList<SMSInfo>();
+			ItemInfos itemInfo = new ItemInfos();
+			for (int j = 0; j < infos.size(); j++) {
+				if (names.get(i).equals(infos.get(j).getName())) {
+					infoList.add(infos.get(j));
+				}
+			}
+			itemInfo.setSmsInfos(infoList);
+			itemInfo.setLastTime(infoList.get(0).getoTime());
+			itemInfos.add(itemInfo);
 		}
 		return itemInfos;
 	}
