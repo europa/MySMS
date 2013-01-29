@@ -69,6 +69,7 @@ public class InfoActivity extends FragmentActivity{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
 		smsReceiver=new SMSReceiver(this,phoneNum);
 		IntentFilter sendFilter=new IntentFilter(Constants.SMS_SEND_ACTION);
 		registerReceiver(smsReceiver, sendFilter);
@@ -84,6 +85,7 @@ public class InfoActivity extends FragmentActivity{
 	@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			
 			sendInfo();
 		}
 	}

@@ -3,56 +3,66 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/personText"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@color/black_translucent"
+        android:gravity="center"
+        android:text="小王 13665553143" />
+
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/personText"
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:background="@color/black_translucent"
-            android:gravity="center"
-            android:text="小王 13665553143" />
-		<TextView 
-		    android:id="@+id/infoPerson"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:padding="10dp"
-		    android:text="@string/me"
-		    android:textSize="@dimen/text_size_info"/>
-        <TextView
-            android:id="@+id/info"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="小王 13665553143"
-            android:textSize="@dimen/text_size_info" />
-    </LinearLayout>
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/infoPerson"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/me"
+                android:textSize="@dimen/text_size_info" />
+
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="小王 13665553143"
+                android:textSize="@dimen/text_size_info" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:layout_weight="0" >
+        android:layout_marginTop="2dp"
+        android:layout_weight="0"
+        android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/reply"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
             android:layout_marginLeft="10dp"
+            android:layout_weight="1"
             android:hint="@string/reply" />
-        <Button 
+
+        <Button
             android:id="@+id/send"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_weight="0"
-            android:layout_gravity="center_vertical"
-            android:text="@string/send"/>
+            android:text="@string/send" />
     </LinearLayout>
 
 </LinearLayout>

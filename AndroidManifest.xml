@@ -31,7 +31,12 @@
         <activity 
             android:name="InfosPersonActivity"></activity>
         <activity 
-            android:name="InfoActivity"></activity>
+            android:name="InfoActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            
+            >
+            
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_SMS" />
