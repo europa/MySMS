@@ -37,21 +37,25 @@ public class InfoUtil {
 		StringBuilder smsBuilder = new StringBuilder();
 		try {
 			Uri uri = Uri.parse(SMS_URI_ALL);
-			String[] projection = { "_id", "address", "person", "body", "date", "type" };
+			String[] projection = { "_id","thread_id", "address", "person", "body", "date", "type" };
 			Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, "date desc");
 			if (cursor.moveToFirst()) {
+				int index_id=cursor.getColumnIndex("_id");
 				int index_address = cursor.getColumnIndex("address");
+				int index_thread=cursor.getColumnIndex("thread_id");
 				int index_person = cursor.getColumnIndex("person");
 				int index_body = cursor.getColumnIndex("body");
 				int index_date = cursor.getColumnIndex("date");
 				int index_type = cursor.getColumnIndex("type");
 				do {
+					int id=cursor.getInt(index_id);
 					String address = cursor.getString(index_address);
 					String person = cursor.getString(index_person);
 					String body = cursor.getString(index_body);
 					long date = cursor.getLong(index_date);
 					int type = cursor.getInt(index_type);
-					Log.i(TAG,"ad:"+address+",person:"+person+",body:"+body+",date:"+date+",type:"+type);
+					long thread=cursor.getLong(index_thread);
+					Log.i(TAG,"id:"+id+",thread:"+thread+",ad:"+address+",person:"+person+",body:"+body+",date:"+date+",type:"+type);
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 					Date d = new Date(date);
 					String dateStr = format.format(d);
@@ -68,6 +72,7 @@ public class InfoUtil {
 					info.setPhoneNum(address);
 					info.setTime(dateStr);
 					info.setContent(body);
+					info.setThread_id(thread);
 					String strType = "";
 					if (type == 1) {
 						strType = "接收";
@@ -100,7 +105,6 @@ public class InfoUtil {
 				if (cursor.moveToFirst()) {
 					int nameId = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME);
 					String phoneName=cursor.getString(nameId);
-					Log.i(TAG,"name:"+name+",phoneName:"+phoneName);
 					if(phoneName==null||phoneName.equals("")){
 						infos.get(i).setName(name);
 					}else{
@@ -167,5 +171,12 @@ public class InfoUtil {
 			cursor.close();
 		}
 		return name;
+	}
+	
+	public static void deleteByThreadId(long thread_id){
+		String deleteUri="content://sms/";
+		mContext.getContentResolver().delete(Uri.parse(deleteUri),"thread_id="+thread_id, null);
+		getSmsContent();
+		Log.i(TAG,"detele");
 	}
 }

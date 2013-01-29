@@ -79,4 +79,11 @@ public class ContentAdapter extends BaseAdapter {
 		mData=InfoUtil.getInfosInPerson();
 		notifyDataSetChanged();
 	}
+	
+	public void deleteByThreadId(int position){
+		long thread_id=((ItemInfos)getItem(position)).getSmsInfos().get(0).getThread_id();
+		InfoUtil.deleteByThreadId(thread_id);
+		mData=InfoUtil.getInfosInPerson();
+		notifyDataSetChanged();
+	}
 }

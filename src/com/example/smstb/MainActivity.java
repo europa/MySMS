@@ -29,6 +29,7 @@ public class MainActivity extends Activity{
 		infosAdapter=new ContentAdapter(this);
 		infosListView.setAdapter(infosAdapter);
 		infosListView.setOnItemClickListener(new ItemClickListener());
+		infosListView.setOnItemLongClickListener(new ListOnItemLongClickListener());
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class MainActivity extends Activity{
 			String str[] = new String[2];
 			str[0] = getResources().getString(R.string.delete_info);
 			str[1]=getResources().getString(R.string.reply);
-			String mMenuHead="";
+			String mMenuHead=getResources().getString(R.string.prompt);
 			DialogUtil.createDialog(MainActivity.this, mMenuHead, str, new AlertDialogOperate() {
 
 				@Override
@@ -82,13 +83,7 @@ public class MainActivity extends Activity{
 			@Override
 			public void operate() {
 				// TODO Auto-generated method stub
-//				if(tabhost.getCurrentTabTag().equals("inbox")){
-//					inboxItems.remove(position);
-//					inboxAdapter.notifyDataSetChanged();
-//				}else{
-//					outboxItems.remove(position);
-//					outboxAdapter.notifyDataSetChanged();
-//				}
+				infosAdapter.deleteByThreadId(position);
 			}
 		});
 	}

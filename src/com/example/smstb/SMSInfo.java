@@ -12,6 +12,7 @@ public class SMSInfo implements Serializable{
 	private String content;
 	private int type;
 	private long oTime;
+	private long thread_id;
 	
 	public String getPhoneNum() {
 		return phoneNum;
@@ -48,6 +49,12 @@ public class SMSInfo implements Serializable{
 	}
 	public void setoTime(long oTime) {
 		this.oTime = oTime;
+	}
+	public long getThread_id() {
+		return thread_id;
+	}
+	public void setThread_id(long thread_id) {
+		this.thread_id = thread_id;
 	}
 	
 }
