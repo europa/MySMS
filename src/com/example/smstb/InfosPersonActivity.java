@@ -1,8 +1,5 @@
 package com.example.smstb;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -34,6 +31,9 @@ public class InfosPersonActivity extends FragmentActivity{
 		
 		personText.setText(name);
 		infoList.setOnItemClickListener(new InfoOnItemClickListener());
+		
+		ListOnItemLongClickListener listOnItemLongClickListener=new ListOnItemLongClickListener(this, smsInfoAdapter);
+		infoList.setOnItemLongClickListener(listOnItemLongClickListener);
 	}
 	
 	
@@ -56,4 +56,5 @@ public class InfosPersonActivity extends FragmentActivity{
 			startActivity(intent);
 		}
 	}
+	
 }

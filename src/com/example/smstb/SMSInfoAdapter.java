@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class SMSInfoAdapter extends BaseAdapter {
+public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 	private static final String TAG="SMSInfoAdapter";
 
 	List<SMSInfo> mInfos = new ArrayList<SMSInfo>();
@@ -92,4 +92,17 @@ public class SMSInfoAdapter extends BaseAdapter {
 		Log.i(TAG,TAG+mInfos.size());
 		notifyDataSetChanged();
 	}
+
+	@Override
+	public void deleteItemById(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public SMSInfo getInfoByPosition(int position) {
+		// TODO Auto-generated method stub
+		return mInfos.get(position);
+	}
+	
 }

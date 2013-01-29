@@ -4,17 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.PhoneLookup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class ContentAdapter extends BaseAdapter {
+public class ContentAdapter extends BaseAdapter implements ListInterface{
 
 	private List<ItemInfos> mData = new ArrayList<ItemInfos>();
 	private LayoutInflater mInflater;
@@ -80,10 +76,13 @@ public class ContentAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 	
-	public void deleteByThreadId(int position){
+	public void deleteItemById(int position){
 		long thread_id=((ItemInfos)getItem(position)).getSmsInfos().get(0).getThread_id();
 		InfoUtil.deleteByThreadId(thread_id);
 		mData=InfoUtil.getInfosInPerson();
 		notifyDataSetChanged();
+	}
+	public SMSInfo getInfoByPosition(int position){
+		return ((List<SMSInfo>)mData.get(position).getSmsInfos()).get(0);
 	}
 }

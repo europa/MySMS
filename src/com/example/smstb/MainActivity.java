@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
 public class MainActivity extends Activity{
@@ -29,7 +28,7 @@ public class MainActivity extends Activity{
 		infosAdapter=new ContentAdapter(this);
 		infosListView.setAdapter(infosAdapter);
 		infosListView.setOnItemClickListener(new ItemClickListener());
-		infosListView.setOnItemLongClickListener(new ListOnItemLongClickListener());
+		infosListView.setOnItemLongClickListener(new ListOnItemLongClickListener(this,infosAdapter));
 	}
 
 	@Override
@@ -54,51 +53,5 @@ public class MainActivity extends Activity{
 			intent.putExtra(Constants.NAME,((ItemInfos)infosAdapter.getItem(position)).getSmsInfos().get(0).getName());
 			startActivity(intent);
 		}
-	}
-
-	class ListOnItemLongClickListener implements OnItemLongClickListener {
-
-		@Override
-		public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-			// TODO Auto-generated method stub
-			String str[] = new String[2];
-			str[0] = getResources().getString(R.string.delete_info);
-			str[1]=getResources().getString(R.string.reply);
-			String mMenuHead=getResources().getString(R.string.prompt);
-			DialogUtil.createDialog(MainActivity.this, mMenuHead, str, new AlertDialogOperateByPosition() {
-				
-				@Override
-				public void operate(int which) {
-					// TODO Auto-generated method stub
-					switch(which){
-					case 0:
-						toAlert(position);
-						break;
-					case 1:
-						toReply(position);
-						break;
-					}
-				}
-			});
-			return false;
-		}
-
-	}
-
-	private void toAlert(final int position) {
-		DialogUtil.createAlertDialog(this, R.string.prompt, R.string.tip, new AlertDialogOperate() {
-			@Override
-			public void operate() {
-				// TODO Auto-generated method stub
-				infosAdapter.deleteByThreadId(position);
-			}
-		});
-	}
-	
-	private void toReply(int position){
-		Intent intent=new Intent();
-		intent.putExtra(Constants.INFO, ((ItemInfos)infosAdapter.getItem(position)).getSmsInfos().get(0));
-		intent.setClass(this, InfoActivity.class);
-		startActivity(intent);
 	}
 }
