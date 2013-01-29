@@ -65,12 +65,19 @@ public class MainActivity extends Activity{
 			str[0] = getResources().getString(R.string.delete_info);
 			str[1]=getResources().getString(R.string.reply);
 			String mMenuHead=getResources().getString(R.string.prompt);
-			DialogUtil.createDialog(MainActivity.this, mMenuHead, str, new AlertDialogOperate() {
-
+			DialogUtil.createDialog(MainActivity.this, mMenuHead, str, new AlertDialogOperateByPosition() {
+				
 				@Override
-				public void operate() {
+				public void operate(int which) {
 					// TODO Auto-generated method stub
-					toAlert(position);
+					switch(which){
+					case 0:
+						toAlert(position);
+						break;
+					case 1:
+						toReply(position);
+						break;
+					}
 				}
 			});
 			return false;
@@ -86,5 +93,12 @@ public class MainActivity extends Activity{
 				infosAdapter.deleteByThreadId(position);
 			}
 		});
+	}
+	
+	private void toReply(int position){
+		Intent intent=new Intent();
+		intent.putExtra(Constants.INFO, ((ItemInfos)infosAdapter.getItem(position)).getSmsInfos().get(0));
+		intent.setClass(this, InfoActivity.class);
+		startActivity(intent);
 	}
 }

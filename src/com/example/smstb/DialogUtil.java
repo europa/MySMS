@@ -40,7 +40,7 @@ public class DialogUtil {
 			}).create().show();
 	}
 	
-	public static void createDialog(Context context,String head,String[] str,final AlertDialogOperate callback){
+	public static void createDialog(Context context,String head,String[] str,final AlertDialogOperateByPosition callback){
 		new AlertDialog.Builder(context)
 			.setTitle(head)
 			.setItems(str, new DialogInterface.OnClickListener() {
@@ -48,7 +48,7 @@ public class DialogUtil {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					callback.operate();
+					callback.operate(which);
 					Log.i(TAG,"Dw:"+which);
 				}
 			})
