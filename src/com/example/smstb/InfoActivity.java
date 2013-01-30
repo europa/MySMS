@@ -41,7 +41,7 @@ public class InfoActivity extends FragmentActivity{
 		setContentView(R.layout.layout_info);
 		mInfo=(SMSInfo) getIntent().getSerializableExtra(Constants.INFO);
 		
-		personText=(TextView) findViewById(R.id.personText);
+		personText=(TextView) findViewById(R.id.head_center);
 		infoText=(TextView) findViewById(R.id.info);
 		infoPerson=(TextView) findViewById(R.id.infoPerson);
 		sendBtn=(Button) findViewById(R.id.send);

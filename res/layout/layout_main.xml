@@ -2,16 +2,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/root" >
+    <include layout="@layout/layout_head"
+        android:layout_below="@id/root"
+        />
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/head"
         android:id="@+id/infoList"/>
     <EditText
         android:id="@+id/reply"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_below="@id/infoList"
-        android:hint="reply"
+        android:hint="@string/reply"
         android:padding="10dp" />
 
 </RelativeLayout>

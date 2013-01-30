@@ -22,7 +22,7 @@ public class InfosPersonActivity extends FragmentActivity{
 		setContentView(R.layout.layout_infos);
 		name=(String) getIntent().getSerializableExtra(Constants.NAME);
 		
-		personText=(TextView) findViewById(R.id.personText);
+		personText=(TextView) findViewById(R.id.head_center);
 		infoList=(ListView) findViewById(R.id.infos);
 		
 		

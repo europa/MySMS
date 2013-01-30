@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_name">SMSTB</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
@@ -16,4 +15,7 @@
     <string name="send_success">您的短信已发送成功</string>
     <string name="send_failure">您的短信发送失败</string>
     <string name="me">我：</string>
+    <string name="new_sms">新建</string>
+    <string name="lastway">上一步</string>
+    <string name="sms">短信</string>
 </resources>

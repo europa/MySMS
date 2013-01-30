@@ -3,13 +3,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/personText"
+    <RelativeLayout
+        android:id="@+id/head"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-		android:background="@color/black_translucent"        
-        android:text="小王 13665553143" />
+        android:layout_height="44dp"
+        android:background="@color/head"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/head_left"
+            android:visibility="gone"
+            style="@style/title_left_btn_style"
+            android:text="@string/lastway" />
+
+        <TextView
+            android:id="@+id/head_center"
+            style="@style/title_center_btn_style"
+            android:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/head_right"
+            style="@style/title_right_btn_style"
+            android:text="@string/new_sms" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/infos"

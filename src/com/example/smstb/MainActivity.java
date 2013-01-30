@@ -1,7 +1,5 @@
 package com.example.smstb;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,7 +21,6 @@ public class MainActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_main);
 		findView();
-		
 		InfoUtil infoUtil=InfoUtil.newInstance(this);
 		infosAdapter=new ContentAdapter(this);
 		infosListView.setAdapter(infosAdapter);
