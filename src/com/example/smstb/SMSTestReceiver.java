@@ -18,9 +18,10 @@ public class SMSTestReceiver extends BroadcastReceiver{
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
+		Bundle bundle=intent.getExtras();
+		Log.i(TAG,"deli");
 		NotificationManager nm=(NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 		Notification nn=new Notification();
-		Bundle bundle=intent.getExtras();
 		Object[] pdus=(Object[]) bundle.get("pdus");
 		if(pdus!=null&&pdus.length!=0){
 			SmsMessage[] messages=new SmsMessage[pdus.length];
@@ -56,6 +57,13 @@ public class SMSTestReceiver extends BroadcastReceiver{
 			}
 		}
 	
-	}
+	} 
+	
+//		Log.i(TAG,"send");
+//		Log.i(TAG,"bundle:"+bundle.getString(Constants.NAME));
+//		Intent sendIntent=new Intent();
+//		sendIntent.putExtra(Constants.NAME, bundle.getString(Constants.NAME));
+//		sendIntent.setClass(context,InfosPersonActivity.class);
+//		context.startActivity(sendIntent);
 
 }

@@ -21,7 +21,7 @@
             style="@style/title_center_btn_style"
             android:text="@string/app_name" />
 
-        <TextView
+        <com.example.smstb.NewButton
             android:id="@+id/head_right"
             style="@style/title_right_btn_style"
             android:text="@string/new_sms" />

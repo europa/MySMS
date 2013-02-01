@@ -40,6 +40,13 @@
             >
             
         </activity>
+        <activity 
+            android:name="NewActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            >
+            
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_SMS" />

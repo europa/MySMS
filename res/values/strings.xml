@@ -11,6 +11,7 @@
     <string name="reply">回复</string>
     <string name="send">发送</string>
     <string name="not_null">您的短信内容为空</string>
+    <string name="phonenum_not_null">请输入号码</string>
     <string name="have_send">您的短信已发送</string>
     <string name="send_success">您的短信已发送成功</string>
     <string name="send_failure">您的短信发送失败</string>
@@ -20,4 +21,5 @@
     <string name="sms">短信</string>
     <string name="new_info">新建短信</string>
     <string name="addressee">收信人</string>
+    <string name="contact">联系人</string>
 </resources>

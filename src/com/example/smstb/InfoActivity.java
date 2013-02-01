@@ -24,8 +24,6 @@ import android.widget.Toast;
 public class InfoActivity extends FragmentActivity{
 
 	private static String TAG="InfoActivity ";
-	private static final String SMS_SEND_ACTION="SMS_SEND_ACTION";
-	private static final String SMS_DELIVERED_ACTION="SMS_DELIVERED_ACTION";
 	private TextView personText,infoText,infoPerson;
 	private SMSInfo mInfo;
 	private Button sendBtn;
@@ -101,8 +99,8 @@ public class InfoActivity extends FragmentActivity{
 			
 			insertInfo(phoneNum,reply);
 			
-			Intent itSend=new Intent(SMS_SEND_ACTION);
-			Intent itDeliver=new Intent(SMS_DELIVERED_ACTION);
+			Intent itSend=new Intent(Constants.SMS_SEND_ACTION);
+			Intent itDeliver=new Intent(Constants.SMS_DELIVERED_ACTION);
 			PendingIntent sendPi=PendingIntent.getActivity(this,0 ,itSend, 0);
 			PendingIntent deliverPi=PendingIntent.getActivity(this,0 ,itDeliver, 0);
 			SmsManager manager=SmsManager.getDefault();
