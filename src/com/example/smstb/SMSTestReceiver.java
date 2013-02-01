@@ -3,6 +3,7 @@ package com.example.smstb;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,9 +16,13 @@ import android.util.Log;
 
 public class SMSTestReceiver extends BroadcastReceiver{
 	private static final String TAG="SMSTestReceiver";
-	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
+		Log.i(TAG,"con:"+context.toString());
+		switch(getResultCode()){
+		case Activity.RESULT_OK:
+			break;
+		}
 		Bundle bundle=intent.getExtras();
 		Log.i(TAG,"deli");
 		NotificationManager nm=(NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);

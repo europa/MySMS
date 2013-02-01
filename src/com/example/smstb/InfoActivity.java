@@ -3,8 +3,11 @@ package com.example.smstb;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,21 +20,25 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InfoActivity extends FragmentActivity{
+public class InfoActivity extends FragmentActivity implements DismissProgessInterface{
 
 	private static String TAG="InfoActivity ";
-	private TextView personText,infoText,infoPerson;
+	private TextView personText,infoText,infoPerson,sendInfo;
 	private SMSInfo mInfo;
 	private Button sendBtn;
+	private ProgressBar sendProgressBar;
 	private EditText replyEdit;
+	private LinearLayout progressLayout;
 	String phoneNum;
-	String name;
+	String name,reply;
 	private List<SMSInfo> mInfos=new ArrayList<SMSInfo>();
-	SMSReceiver smsReceiver;
+	private SMSReceiver receiver;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -44,6 +51,9 @@ public class InfoActivity extends FragmentActivity{
 		infoPerson=(TextView) findViewById(R.id.infoPerson);
 		sendBtn=(Button) findViewById(R.id.send);
 		replyEdit=(EditText) findViewById(R.id.reply);
+		sendInfo=(TextView) findViewById(R.id.sendInfo);
+		sendProgressBar=(ProgressBar) findViewById(R.id.sendProgress);
+		progressLayout=(LinearLayout) findViewById(R.id.progressLayout);
 		
 		phoneNum=mInfo.getPhoneNum();
 		name=mInfo.getName();
@@ -67,15 +77,13 @@ public class InfoActivity extends FragmentActivity{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
-		smsReceiver=new SMSReceiver(this,phoneNum);
-		IntentFilter sendFilter=new IntentFilter(Constants.SMS_SEND_ACTION);
-		registerReceiver(smsReceiver, sendFilter);
+		receiver=new SMSReceiver(this);
+		registerReceiver(receiver, new IntentFilter(Constants.SMS_SEND_ACTION));
 	}
 
 	protected void onPause(){
 		super.onPause();
-		unregisterReceiver(smsReceiver);
+		unregisterReceiver(receiver);
 	}
 
 	class SendOnClickListener implements OnClickListener{
@@ -95,11 +103,13 @@ public class InfoActivity extends FragmentActivity{
 			Toast.makeText(this, R.string.not_null,1000).show();
 		}else{
 			Log.i(TAG,"send");
-			String reply=replyEdit.getText().toString();
+			reply=replyEdit.getText().toString();
 			
+			sendProgressBar.setVisibility(View.VISIBLE);
 			insertInfo(phoneNum,reply);
 			
 			Intent itSend=new Intent(Constants.SMS_SEND_ACTION);
+			sendBroadcast(itSend);
 			Intent itDeliver=new Intent(Constants.SMS_DELIVERED_ACTION);
 			PendingIntent sendPi=PendingIntent.getActivity(this,0 ,itSend, 0);
 			PendingIntent deliverPi=PendingIntent.getActivity(this,0 ,itDeliver, 0);
@@ -126,5 +136,12 @@ public class InfoActivity extends FragmentActivity{
 		value.put(BODY, reply);
 		
 		getContentResolver().insert(Uri.parse("content://sms"), value);
+	}
+	
+	public void dismissProgress(){
+		Log.i(TAG,"diss");
+		sendProgressBar.setVisibility(View.GONE);
+		sendInfo.setText(reply);
+		progressLayout.setVisibility(View.VISIBLE);
 	}
 }
