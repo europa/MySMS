@@ -62,11 +62,16 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 			viewHolder.amount = (TextView) view.findViewById(R.id.amount);
 			viewHolder.time = (TextView) view.findViewById(R.id.time);
 			viewHolder.content = (TextView) view.findViewById(R.id.content);
+			viewHolder.draftTextView=(TextView) view.findViewById(R.id.draft);
 			view.setTag(viewHolder);
 		}
 		ViewHolder viewHolder = (ViewHolder) view.getTag();
+		viewHolder.draftTextView.setVisibility(View.INVISIBLE);
 		if(mInfos.get(position).getType()==1){
 			viewHolder.phoneNum.setText("我");
+		}else if(mInfos.get(position).getType()==2){
+			viewHolder.phoneNum.setText("我");
+			viewHolder.draftTextView.setVisibility(View.VISIBLE);
 		}else{
 			viewHolder.phoneNum.setText(mInfos.get(position).getName());
 		}
@@ -81,6 +86,7 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 		TextView amount;
 		TextView time;
 		TextView content;
+		TextView draftTextView;
 	}
 	
 	public void refreshData(){
@@ -94,9 +100,12 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 	}
 
 	@Override
-	public void deleteItemById(int id) {
+	public void deleteItemById(int position) {
 		// TODO Auto-generated method stub
-		
+		int id=mInfos.get(position).getId();
+		InfoUtil.deleteById(id);
+		mInfos=InfoUtil.getInfosByName(mName);
+		notifyDataSetChanged();
 	}
 
 	@Override

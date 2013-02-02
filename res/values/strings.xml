@@ -7,7 +7,8 @@
     <string name="cancel">取消</string>
     <string name="prompt">提示</string>
     <string name="tip">是否删除与该人的全部对话</string>
-    <string name="delete_info">删除与该人的聊天</string>
+    <string name="delete_infos">删除与该人的聊天</string>
+    <string name="delete_info">删除短信</string>
     <string name="reply">回复</string>
     <string name="send">发送</string>
     <string name="not_null">您的短信内容为空</string>
@@ -22,4 +23,6 @@
     <string name="new_info">新建短信</string>
     <string name="addressee">收信人</string>
     <string name="contact">联系人</string>
+    <string name="draft">草稿</string>
+    <string name="save_draft">正在保存草稿</string>
 </resources>

@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.R.integer;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
+import android.widget.Toast;
 
 public class InfoUtil {
 	private static final String TAG="InfoUtil";
@@ -59,6 +62,27 @@ public class InfoUtil {
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 					Date d = new Date(date);
 					String dateStr = format.format(d);
+					
+					SMSInfo info = new SMSInfo();
+					if (type == 1) {//发送
+						info.setType(0);
+					} else if (type == 2) {//接收
+						info.setType(1);
+					} else if(type==3){//草稿
+						info.setType(2);
+						address=queryById(id);
+						Log.i(TAG,"address:"+address);
+					}else{
+//						Log.i(TAG,"type:"+type);
+						continue ;
+					}
+					info.setId(id);
+					info.setoTime(date);
+					info.setPhoneNum(address);
+					info.setTime(dateStr);
+					info.setContent(body);
+					info.setThread_id(thread);
+					String strType = "";
 					if(address==null){
 						Log.i(TAG,"==body:"+body+",date:"+date+",type:"+type);
 						continue;
@@ -66,26 +90,6 @@ public class InfoUtil {
 					if(address.equals("")){
 						Log.i(TAG,"eqbody:"+body+",date:"+date+",type:"+type);
 						continue;
-					}
-					SMSInfo info = new SMSInfo();
-					info.setoTime(date);
-					info.setPhoneNum(address);
-					info.setTime(dateStr);
-					info.setContent(body);
-					info.setThread_id(thread);
-					String strType = "";
-					if (type == 1) {
-						strType = "接收";
-						if (info.getPhoneNum().equals("")) {	
-							continue;
-						} else {
-							info.setType(0);
-						}
-					} else if (type == 2) {
-						strType = "发送";
-						info.setType(1);
-					} else {
-						strType = "null";
 					}
 					infos.add(info);
 				} while (cursor.moveToNext());
@@ -105,6 +109,8 @@ public class InfoUtil {
 				if (cursor.moveToFirst()) {
 					int nameId = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME);
 					String phoneName=cursor.getString(nameId);
+					if(infos.get(i).getPhoneNum().equals("10086")){
+					}
 					if(phoneName==null||phoneName.equals("")){
 						infos.get(i).setName(name);
 					}else{
@@ -124,31 +130,43 @@ public class InfoUtil {
 	}
 
 	public static List<ItemInfos> getInfosInPerson() {
-		List<String> names = new ArrayList<String>();
+		List<Long> threadIds = new ArrayList<Long>();
 		List<ItemInfos> itemInfos = new ArrayList<ItemInfos>();
 
-		for (int i = 0; i < infos.size(); i++) {
-			if (!names.contains(infos.get(i).getName())) {
-				names.add(infos.get(i).getName());
+		for(int i=0;i<infos.size();i++){
+			if(threadIds.contains(infos.get(i).getThread_id())){
+				continue;
 			}
+			threadIds.add(infos.get(i).getThread_id());
 		}
-		for (int i = 0; i < names.size(); i++) {
+		for (int i = 0; i < threadIds.size(); i++) {
 			List<SMSInfo> infoList = new ArrayList<SMSInfo>();
 			ItemInfos itemInfo = new ItemInfos();
 			for (int j = 0; j < infos.size(); j++) {
-				if (names.get(i).equals(infos.get(j).getName())) {
-					infoList.add(infos.get(j));
+				SMSInfo info=null;
+				info=infos.get(j);
+				if(threadIds.get(i).equals(info.getThread_id())){
+					infoList.add(info);
 				}
 			}
 			itemInfo.setSmsInfos(infoList);
-			itemInfo.setLastTime(infoList.get(0).getoTime());
+			if(infoList.size()==0){
+				Log.i(TAG,"infolist");
+			}else{
+				itemInfo.setLastTime(infoList.get(0).getoTime());
+			}
 			itemInfos.add(itemInfo);
+		}
+		for(int i=0;i<threadIds.size();i++){
+			if(itemInfos.get(i).getSmsInfos().size()==0){
+				
+			}else{
+			}
 		}
 		return itemInfos;
 	}
 	public static List<SMSInfo> getInfosByName(String name){
 		List<SMSInfo> infosByName=new ArrayList<SMSInfo>();
-		Log.i(TAG,"infos:"+infos.size());
 		for(int i=0;i<infos.size();i++){
 			if(name.equals(infos.get(i).getName())){
 				infosByName.add(infos.get(i));
@@ -177,6 +195,97 @@ public class InfoUtil {
 		String deleteUri="content://sms/";
 		mContext.getContentResolver().delete(Uri.parse(deleteUri),"thread_id="+thread_id, null);
 		getSmsContent();
-		Log.i(TAG,"detele");
+	}
+	
+	public static void deleteById(long id){
+		String deleteUri="content://sms/";
+		mContext.getContentResolver().delete(Uri.parse(deleteUri),"_id="+id, null);
+		getSmsContent();
+	}
+	
+	public static void queryByThreadId(long thread_id){
+		String deleteUri="content://sms/";
+		String[] projection = { "_id","thread_id", "address", "person", "body", "date", "type" };
+		Cursor cursor=mContext.getContentResolver().query(Uri.parse(deleteUri),projection,"thread_id="+thread_id,null,"date desc");
+		while(cursor.moveToNext()){
+			int index_id=cursor.getColumnIndex("_id");
+			int index_address = cursor.getColumnIndex("address");
+			int index_thread=cursor.getColumnIndex("thread_id");
+			int index_person = cursor.getColumnIndex("person");
+			int index_body = cursor.getColumnIndex("body");
+			int index_date = cursor.getColumnIndex("date");
+			int index_type = cursor.getColumnIndex("type");
+			int id=cursor.getInt(index_id);
+			String address = cursor.getString(index_address);
+			String person = cursor.getString(index_person);
+			String body = cursor.getString(index_body);
+			long date = cursor.getLong(index_date);
+			int type = cursor.getInt(index_type);
+			long thread=cursor.getLong(index_thread);
+//			Log.i(TAG,"id:"+id+",thread:"+thread+",ad:"+address+",person:"+person+",body:"+body+",date:"+date+",type:"+type);
+		}
+		
+	}
+	
+	public static String queryById(long id){
+		Cursor draftCursor = mContext.getContentResolver().query(Uri.parse("content://sms"), 
+                new String[] {"canonical_addresses.address " +
+                        "from sms,threads,canonical_addresses " +
+                        "where sms.thread_id=threads._id and threads.recipient_ids=canonical_addresses._id and sms._id ='" + 
+                        String.valueOf(id) + "' --"},
+                null, null, null);
+		String address="";
+		while(draftCursor.moveToNext()){
+			int index_address = draftCursor.getColumnIndex("address");
+			address = draftCursor.getString(index_address);
+		}
+		return address;
+	}
+	
+	public static void saveDraft(SMSInfo info,Context context){
+		String ID="_id";
+		String THREAD_ID="thread_id";
+		String ADDRESS="address";
+		String DATE="date";
+		String READ="read";
+		String STATUS="status";
+		String TYPE="type";
+		String BODY="body";
+		
+		ContentValues value=new ContentValues();
+//		value.put(ID, mInfo.getId());
+		value.put(THREAD_ID,info.getThread_id());
+		value.put(ADDRESS, info.getPhoneNum());
+		value.put(DATE, String.valueOf(System.currentTimeMillis()));
+		value.put(READ, "1");
+		value.put(STATUS, "-1");
+		value.put(TYPE,"3");
+		value.put(BODY, info.getContent());
+		context.getContentResolver().update(Uri.parse("content://sms"), value,ID+"="+info.getId(), null);
+		InfoUtil.getSmsContent();
+		Toast.makeText(context, R.string.save_draft,1000).show();
+		
+	}
+	
+	public static void insertDraft(SMSInfo info,Context context){
+		Log.i(TAG,"insert");
+		String ADDRESS="address";
+		String DATE="date";
+		String TYPE="type";
+		String BODY="body";
+		long time;
+		
+		ContentValues value=new ContentValues();
+		value.put(ADDRESS, info.getPhoneNum());
+		time=System.currentTimeMillis();
+		value.put(DATE, String.valueOf(System.currentTimeMillis()));
+		value.put(TYPE,"2");
+		value.put(BODY, info.getContent());
+		
+		context.getContentResolver().insert(Uri.parse("content://sms"), value);
+		value.put(TYPE, "3");
+		context.getContentResolver().update(Uri.parse("content://sms"), value,"date="+time, null);
+		InfoUtil.getSmsContent();
+		Toast.makeText(context, R.string.save_draft,1000).show();
 	}
 }

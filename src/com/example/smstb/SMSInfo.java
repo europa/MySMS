@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SMSInfo implements Serializable{
+	private int id;
 	private String phoneNum;
 	private String name;
 	private String time;
@@ -14,6 +15,13 @@ public class SMSInfo implements Serializable{
 	private long oTime;
 	private long thread_id;
 	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getPhoneNum() {
 		return phoneNum;
 	}

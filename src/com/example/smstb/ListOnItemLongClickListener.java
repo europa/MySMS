@@ -1,5 +1,6 @@
 package com.example.smstb;
 
+import android.R.integer;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -20,8 +21,12 @@ public class ListOnItemLongClickListener implements OnItemLongClickListener{
 	public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 			// TODO Auto-generated method stub
 			String str[] = new String[2];
-			str[0] = mContext.getResources().getString(R.string.delete_info);
-			str[1]=mContext.getResources().getString(R.string.reply);
+			if(mContext instanceof MainActivity){
+				str[0] = mContext.getResources().getString(R.string.delete_infos);
+			}else{
+				str[0] = mContext.getResources().getString(R.string.delete_info);
+			}
+				str[1]=mContext.getResources().getString(R.string.reply);
 			String mMenuHead=mContext.getResources().getString(R.string.prompt);
 			DialogUtil.createDialog(mContext, mMenuHead, str, new AlertDialogOperateByPosition() {
 				
@@ -30,7 +35,11 @@ public class ListOnItemLongClickListener implements OnItemLongClickListener{
 					// TODO Auto-generated method stub
 					switch(which){
 					case 0:
-						toAlert(position);
+						if(mContext instanceof MainActivity){
+							toAlert(position,R.string.tip);
+						}else{
+							toAlert(position,R.string.delete_info);
+						}
 						break;
 					case 1:
 						toReply(position);
@@ -41,8 +50,8 @@ public class ListOnItemLongClickListener implements OnItemLongClickListener{
 			return false;
 	}
 
-	private void toAlert(final int position) {
-		DialogUtil.createAlertDialog(mContext, R.string.prompt, R.string.tip, new AlertDialogOperate() {
+	private void toAlert(final int position,final int str) {
+		DialogUtil.createAlertDialog(mContext, R.string.prompt, str, new AlertDialogOperate() {
 			@Override
 			public void operate() {
 				// TODO Auto-generated method stub

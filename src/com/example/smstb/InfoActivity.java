@@ -64,10 +64,14 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 		}
 		if(mInfo.getType()==1){
 			infoPerson.setText(R.string.me);
+			infoText.setText(mInfo.getContent());
+		}else if(mInfo.getType()==2){
+			infoText.setText("");
+			replyEdit.setText(mInfo.getContent());
 		}else{
 			infoPerson.setText(name+"：");
+			infoText.setText(mInfo.getContent());
 		}
-		infoText.setText(mInfo.getContent());
 		
 		sendBtn.setOnClickListener(new SendOnClickListener());
 	}
@@ -83,6 +87,12 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 
 	protected void onPause(){
 		super.onPause();
+		if(replyEdit.getText()!=null&&replyEdit.getText().equals("")){
+			mInfo.setContent(replyEdit.getText().toString());
+			InfoUtil.saveDraft(mInfo,this);
+		}else{
+			
+		}
 		unregisterReceiver(receiver);
 	}
 
@@ -97,7 +107,6 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 	}
 	
 	private void sendInfo(){
-		Log.i(TAG,replyEdit.getText().toString()+"here");
 		if((replyEdit.getText().toString()).equals("")){
 			Log.i(TAG,"null");
 			Toast.makeText(this, R.string.not_null,1000).show();
@@ -136,6 +145,7 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 		value.put(BODY, reply);
 		
 		getContentResolver().insert(Uri.parse("content://sms"), value);
+		InfoUtil.getSmsContent();
 	}
 	
 	public void dismissProgress(){
