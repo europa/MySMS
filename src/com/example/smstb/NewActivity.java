@@ -43,7 +43,7 @@ public class NewActivity extends FragmentActivity{
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		if(autoCompleteTextView.getText().equals("")&&replyEditText.getText().toString().trim().equals("")){
+		if(autoCompleteTextView.getText().equals("")||replyEditText.getText().toString().trim().equals("")){
 			return;
 		}
 		info.setContent(autoCompleteTextView.getText().toString());
