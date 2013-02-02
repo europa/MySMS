@@ -22,6 +22,7 @@ public class NewActivity extends FragmentActivity{
 	private Button sendBtn;
 	private String contact;
 	private String reply;
+	private SMSInfo info=new SMSInfo();
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -37,6 +38,20 @@ public class NewActivity extends FragmentActivity{
 		sendBtn=(Button) findViewById(R.id.send);
 	}
 	
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		if(autoCompleteTextView.getText().equals("")||replyEditText.getText().toString().trim().equals("")){
+			return;
+		}
+		info.setContent(autoCompleteTextView.getText().toString());
+		info.setPhoneNum(replyEditText.getText().toString().trim());
+		InfoUtil.insertDraft(info, this);
+	}
+
+
 	class SendOnClickListener implements OnClickListener{
 
 		@Override

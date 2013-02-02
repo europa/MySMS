@@ -25,5 +25,4 @@ public class ItemInfos implements Serializable{
 	public void setLastTime(long lastTime) {
 		this.lastTime = lastTime;
 	}
-	
 }
