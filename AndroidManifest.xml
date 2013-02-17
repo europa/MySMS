@@ -45,8 +45,9 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan"
             >
-            
         </activity>
+        <activity 
+            android:name="ContactActivity"></activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_SMS" />
