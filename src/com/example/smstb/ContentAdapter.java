@@ -58,16 +58,16 @@ public class ContentAdapter extends BaseAdapter implements ListInterface{
 			view.setTag(viewHolder);
 		}
 		ViewHolder viewHolder = (ViewHolder) view.getTag();
-		if(mData.get(position).getSmsInfos().get(0).getType()==2){
+		if(mData.get(position).getSmsInfo().getType()==2){
 			viewHolder.draft.setVisibility(View.VISIBLE);
 		}else{
 			viewHolder.draft.setVisibility(View.INVISIBLE);
 		}
 		
-		viewHolder.phoneNum.setText(mData.get(position).getSmsInfos().get(0).getName());
-		viewHolder.amount.setText("(" + mData.get(position).getSmsInfos().size() + ")");
-		viewHolder.time.setText(mData.get(position).getSmsInfos().get(0).getTime());
-		viewHolder.content.setText(mData.get(position).getSmsInfos().get(0).getContent());
+		viewHolder.phoneNum.setText(mData.get(position).getSmsInfo().getName());
+		viewHolder.amount.setText("(" + mData.get(position).getAmount() + ")");
+		viewHolder.time.setText(mData.get(position).getSmsInfo().getTime());
+		viewHolder.content.setText(mData.get(position).getSmsInfo().getContent());
 		// viewHolder.phoneNum.setText(mData.get(position).getSmsInfos().get(0).getPhoneNum());
 		return view;
 	}
@@ -86,12 +86,12 @@ public class ContentAdapter extends BaseAdapter implements ListInterface{
 	}
 	
 	public void deleteItemById(int position){
-		long thread_id=((ItemInfos)getItem(position)).getSmsInfos().get(0).getThread_id();
+		long thread_id=((ItemInfos)getItem(position)).getSmsInfo().getThread_id();
 		InfoUtil.deleteByThreadId(thread_id);
 		mData=InfoUtil.getInfosInPerson();
 		notifyDataSetChanged();
 	}
 	public SMSInfo getInfoByPosition(int position){
-		return ((List<SMSInfo>)mData.get(position).getSmsInfos()).get(0);
+		return mData.get(position).getSmsInfo();
 	}
 }

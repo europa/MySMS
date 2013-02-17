@@ -7,22 +7,22 @@ import java.util.List;
 import android.os.Parcelable;
 
 public class ItemInfos implements Serializable{
-	private List<SMSInfo> smsInfos;
-	private long lastTime;
-
-	public ArrayList<SMSInfo> getSmsInfos() {
-		return (ArrayList<SMSInfo>) smsInfos;
+	private SMSInfo smsInfo;
+	private int amount;
+	
+	public SMSInfo getSmsInfo() {
+		return smsInfo;
 	}
 
-	public void setSmsInfos(List<SMSInfo> smsInfos) {
-		this.smsInfos = smsInfos;
+	public void setSmsInfo(SMSInfo smsInfo) {
+		this.smsInfo = smsInfo;
 	}
 
-	public long getLastTime() {
-		return lastTime;
+	public int getAmount() {
+		return amount;
 	}
 
-	public void setLastTime(long lastTime) {
-		this.lastTime = lastTime;
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 }

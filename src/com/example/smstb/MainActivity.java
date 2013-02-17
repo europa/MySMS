@@ -47,7 +47,7 @@ public class MainActivity extends Activity{
 			// TODO Auto-generated method stub
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, InfosPersonActivity.class);
-			intent.putExtra(Constants.NAME,((ItemInfos)infosAdapter.getItem(position)).getSmsInfos().get(0).getName());
+			intent.putExtra(Constants.NAME,((ItemInfos)infosAdapter.getItem(position)).getSmsInfo().getName());
 			startActivity(intent);
 		}
 	}

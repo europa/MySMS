@@ -29,6 +29,7 @@ public class InfoUtil {
 		return infoUtil;
 	}
 	public static String getSmsContent() {
+		Log.i(TAG,"before get content:"+System.currentTimeMillis());
 		infos.clear();
 		final String SMS_URI_ALL = "content://sms/";
 		final String SMS_URI_INBOX = "content://sms/inbox";
@@ -126,45 +127,96 @@ public class InfoUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Log.i(TAG,"after get content:"+System.currentTimeMillis());
 		return smsBuilder.toString();
 	}
 
 	public static List<ItemInfos> getInfosInPerson() {
+		Log.i(TAG,"before get content:"+System.currentTimeMillis());
+		final String SMS_URI_ALL = "content://sms/";
+		StringBuilder smsBuilder = new StringBuilder();
 		List<Long> threadIds = new ArrayList<Long>();
-		List<ItemInfos> itemInfos = new ArrayList<ItemInfos>();
-
-		for(int i=0;i<infos.size();i++){
-			if(threadIds.contains(infos.get(i).getThread_id())){
-				continue;
-			}
-			threadIds.add(infos.get(i).getThread_id());
-		}
-		for (int i = 0; i < threadIds.size(); i++) {
-			List<SMSInfo> infoList = new ArrayList<SMSInfo>();
-			ItemInfos itemInfo = new ItemInfos();
-			for (int j = 0; j < infos.size(); j++) {
-				SMSInfo info=null;
-				info=infos.get(j);
-				if(threadIds.get(i).equals(info.getThread_id())){
-					infoList.add(info);
+		List<ItemInfos> itemInfoss = new ArrayList<ItemInfos>();
+		try {
+			Uri uri = Uri.parse(SMS_URI_ALL);
+			String[] projection = { "_id","thread_id", "address", "person", "body", "date", "type" };
+			Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, "date desc");
+			if (cursor.moveToFirst()) {
+				int index_id=cursor.getColumnIndex("_id");
+				int index_address = cursor.getColumnIndex("address");
+				int index_thread=cursor.getColumnIndex("thread_id");
+				int index_person = cursor.getColumnIndex("person");
+				int index_body = cursor.getColumnIndex("body");
+				int index_date = cursor.getColumnIndex("date");
+				int index_type = cursor.getColumnIndex("type");
+				do {
+					int id=cursor.getInt(index_id);
+					String address = cursor.getString(index_address);
+					String person = cursor.getString(index_person);
+					String body = cursor.getString(index_body);
+					long date = cursor.getLong(index_date);
+					int type = cursor.getInt(index_type);
+					long thread=cursor.getLong(index_thread);
+					Log.i(TAG,"id:"+id+",thread:"+thread+",ad:"+address+",person:"+person+",body:"+body+",date:"+date+",type:"+type);
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+					Date d = new Date(date);
+					String dateStr = format.format(d);
+					
+					SMSInfo info = new SMSInfo();
+					ItemInfos itemInfos=new ItemInfos();
+					if (type == 1) {//发送
+						info.setType(0);
+					} else if (type == 2) {//接收
+						info.setType(1);
+					} else if(type==3){//草稿
+						info.setType(2);
+						address=queryById(id);
+						Log.i(TAG,"address:"+address);
+					}else{
+//						Log.i(TAG,"type:"+type);
+						continue ;
+					}
+					if(threadIds.contains(thread)){
+						itemInfos=itemInfoss.get(threadIds.indexOf(thread));
+						itemInfos.setAmount(itemInfos.getAmount()+1);
+						itemInfoss.add(threadIds.indexOf(thread), itemInfos);
+						continue;
+					}
+					threadIds.add(thread);	
+					info.setId(id);
+					info.setoTime(date);
+					info.setPhoneNum(address);
+					info.setTime(dateStr);
+					info.setContent(body);
+					info.setThread_id(thread);
+					String strType = "";
+					if(address==null){
+						Log.i(TAG,"==body:"+body+",date:"+date+",type:"+type);
+						continue;
+					}
+					if(address.equals("")){
+						Log.i(TAG,"eqbody:"+body+",date:"+date+",type:"+type);
+						continue;
+					}
+					itemInfos.setSmsInfo(info);
+					itemInfos.setAmount(1);
+					infos.add(info);
+				} while (cursor.moveToNext());
+				if (!cursor.isClosed()) {
+					cursor.close();
+					cursor = null;
 				}
+			} else {
+				smsBuilder.append("no result");
 			}
-			itemInfo.setSmsInfos(infoList);
-			if(infoList.size()==0){
-				Log.i(TAG,"infolist");
-			}else{
-				itemInfo.setLastTime(infoList.get(0).getoTime());
-			}
-			itemInfos.add(itemInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		for(int i=0;i<threadIds.size();i++){
-			if(itemInfos.get(i).getSmsInfos().size()==0){
-				
-			}else{
-			}
-		}
-		return itemInfos;
+		Log.i(TAG,"after get content:"+System.currentTimeMillis());
+		return itemInfoss;
 	}
+
+	
 	public static List<SMSInfo> getInfosByName(String name){
 		List<SMSInfo> infosByName=new ArrayList<SMSInfo>();
 		for(int i=0;i<infos.size();i++){
