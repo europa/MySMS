@@ -132,38 +132,41 @@ public class InfoUtil {
 	}
 
 	public static List<ItemInfos> getInfosInPerson() {
-		Log.i(TAG,"before get content:"+System.currentTimeMillis());
+		Log.i(TAG,"before get in:"+System.currentTimeMillis());
 		final String SMS_URI_ALL = "content://sms/";
-		StringBuilder smsBuilder = new StringBuilder();
 		List<Long> threadIds = new ArrayList<Long>();
 		List<ItemInfos> itemInfoss = new ArrayList<ItemInfos>();
 		try {
 			Uri uri = Uri.parse(SMS_URI_ALL);
-			String[] projection = { "_id","thread_id", "address", "person", "body", "date", "type" };
+			String[] projection = { "_id","thread_id", "address",  "body", "date", "type" };
 			Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, "date desc");
 			if (cursor.moveToFirst()) {
 				int index_id=cursor.getColumnIndex("_id");
 				int index_address = cursor.getColumnIndex("address");
 				int index_thread=cursor.getColumnIndex("thread_id");
-				int index_person = cursor.getColumnIndex("person");
 				int index_body = cursor.getColumnIndex("body");
 				int index_date = cursor.getColumnIndex("date");
 				int index_type = cursor.getColumnIndex("type");
 				do {
+				
+					long thread=cursor.getLong(index_thread);
+					SMSInfo info = new SMSInfo();
+					ItemInfos itemInfos=new ItemInfos();
+					if(threadIds.contains(thread)){
+						itemInfos=itemInfoss.get(threadIds.indexOf(thread));
+						int amount=itemInfos.getAmount()+1;
+						itemInfoss.get(threadIds.indexOf(thread)).setAmount(amount);
+						continue;
+					}
 					int id=cursor.getInt(index_id);
 					String address = cursor.getString(index_address);
-					String person = cursor.getString(index_person);
 					String body = cursor.getString(index_body);
 					long date = cursor.getLong(index_date);
 					int type = cursor.getInt(index_type);
-					long thread=cursor.getLong(index_thread);
-					Log.i(TAG,"id:"+id+",thread:"+thread+",ad:"+address+",person:"+person+",body:"+body+",date:"+date+",type:"+type);
+					Log.i(TAG,"id:"+id+",thread:"+thread+",ad:"+address+",body:"+body+",date:"+date+",type:"+type);
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 					Date d = new Date(date);
 					String dateStr = format.format(d);
-					
-					SMSInfo info = new SMSInfo();
-					ItemInfos itemInfos=new ItemInfos();
 					if (type == 1) {//发送
 						info.setType(0);
 					} else if (type == 2) {//接收
@@ -176,12 +179,7 @@ public class InfoUtil {
 //						Log.i(TAG,"type:"+type);
 						continue ;
 					}
-					if(threadIds.contains(thread)){
-						itemInfos=itemInfoss.get(threadIds.indexOf(thread));
-						itemInfos.setAmount(itemInfos.getAmount()+1);
-						itemInfoss.add(threadIds.indexOf(thread), itemInfos);
-						continue;
-					}
+					
 					threadIds.add(thread);	
 					info.setId(id);
 					info.setoTime(date);
@@ -189,7 +187,6 @@ public class InfoUtil {
 					info.setTime(dateStr);
 					info.setContent(body);
 					info.setThread_id(thread);
-					String strType = "";
 					if(address==null){
 						Log.i(TAG,"==body:"+body+",date:"+date+",type:"+type);
 						continue;
@@ -198,34 +195,47 @@ public class InfoUtil {
 						Log.i(TAG,"eqbody:"+body+",date:"+date+",type:"+type);
 						continue;
 					}
+					
 					itemInfos.setSmsInfo(info);
 					itemInfos.setAmount(1);
-					infos.add(info);
+					itemInfoss.add(itemInfos);
 				} while (cursor.moveToNext());
 				if (!cursor.isClosed()) {
 					cursor.close();
 					cursor = null;
 				}
+				
+				
 			} else {
-				smsBuilder.append("no result");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Log.i(TAG,"after get content:"+System.currentTimeMillis());
+		for(int i=0;i<itemInfoss.size();i++){
+			Log.i(TAG,"i:"+i);
+			String name = itemInfoss.get(i).getSmsInfo().getPhoneNum();
+			Uri personUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+					name);
+			Cursor cursor = mContext.getContentResolver().query(personUri,
+					new String[] { PhoneLookup.DISPLAY_NAME }, null, null, null);
+			if (cursor.moveToFirst()) {
+				int nameId = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME);
+				String phoneName=cursor.getString(nameId);
+				if(phoneName==null||phoneName.equals("")){
+					itemInfoss.get(i).getSmsInfo().setName(name);
+				}else{
+					itemInfoss.get(i).getSmsInfo().setName(phoneName);
+				}
+			}else{
+				//有号码，但不在联系人中的
+				itemInfoss.get(i).getSmsInfo().setName(name);
+			}
+			Log.i(TAG,"name:"+itemInfoss.get(i).getSmsInfo().getName()); cursor.close();
+		}
+		Log.i(TAG,"after get in:"+System.currentTimeMillis());
 		return itemInfoss;
 	}
 
-	
-	public static List<SMSInfo> getInfosByName(String name){
-		List<SMSInfo> infosByName=new ArrayList<SMSInfo>();
-		for(int i=0;i<infos.size();i++){
-			if(name.equals(infos.get(i).getName())){
-				infosByName.add(infos.get(i));
-			}
-		}
-		return infosByName;
-	}
 	public static String getInfosByPhoneNum(String phoneNum){
 		String name="";
 		Uri nameUri=Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, phoneNum);
@@ -255,28 +265,50 @@ public class InfoUtil {
 		getSmsContent();
 	}
 	
-	public static void queryByThreadId(long thread_id){
+	public static List<SMSInfo> queryByThreadId(String name,long thread_id){
+		List<SMSInfo> infos=new ArrayList<SMSInfo>();
 		String deleteUri="content://sms/";
-		String[] projection = { "_id","thread_id", "address", "person", "body", "date", "type" };
+		String[] projection = { "_id", "address", "body", "date", "type" };
 		Cursor cursor=mContext.getContentResolver().query(Uri.parse(deleteUri),projection,"thread_id="+thread_id,null,"date desc");
 		while(cursor.moveToNext()){
+			SMSInfo info=new SMSInfo();
+			
 			int index_id=cursor.getColumnIndex("_id");
 			int index_address = cursor.getColumnIndex("address");
-			int index_thread=cursor.getColumnIndex("thread_id");
-			int index_person = cursor.getColumnIndex("person");
 			int index_body = cursor.getColumnIndex("body");
 			int index_date = cursor.getColumnIndex("date");
 			int index_type = cursor.getColumnIndex("type");
 			int id=cursor.getInt(index_id);
 			String address = cursor.getString(index_address);
-			String person = cursor.getString(index_person);
 			String body = cursor.getString(index_body);
 			long date = cursor.getLong(index_date);
 			int type = cursor.getInt(index_type);
-			long thread=cursor.getLong(index_thread);
-//			Log.i(TAG,"id:"+id+",thread:"+thread+",ad:"+address+",person:"+person+",body:"+body+",date:"+date+",type:"+type);
+			
+			
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Date d = new Date(date);
+			String dateStr = format.format(d);
+			if (type == 1) {//发送
+				info.setType(0);
+			} else if (type == 2) {//接收
+				info.setType(1);
+			} else if(type==3){//草稿
+				info.setType(2);
+				address=queryById(id);
+				Log.i(TAG,"address:"+address);
+			}else{
+				continue ;
+			}
+			info.setId(id);
+			info.setoTime(date);
+			info.setPhoneNum(address);
+			info.setTime(dateStr);
+			info.setContent(body);
+			info.setThread_id(thread_id);
+			info.setName(name);
+			infos.add(info);
 		}
-		
+		return infos;
 	}
 	
 	public static String queryById(long id){

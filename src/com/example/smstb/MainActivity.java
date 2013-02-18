@@ -24,6 +24,7 @@ public class MainActivity extends Activity{
 		InfoUtil infoUtil=InfoUtil.newInstance(this);
 		infosAdapter=new ContentAdapter(this);
 		infosListView.setAdapter(infosAdapter);
+		infosAdapter.refreshData();
 		infosListView.setOnItemClickListener(new ItemClickListener());
 		infosListView.setOnItemLongClickListener(new ListOnItemLongClickListener(this,infosAdapter));
 	}
@@ -31,8 +32,6 @@ public class MainActivity extends Activity{
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-		InfoUtil.getSmsContent();
-		infosAdapter.refreshData();
 		super.onResume();
 	}
 
@@ -48,6 +47,7 @@ public class MainActivity extends Activity{
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, InfosPersonActivity.class);
 			intent.putExtra(Constants.NAME,((ItemInfos)infosAdapter.getItem(position)).getSmsInfo().getName());
+			intent.putExtra(Constants.THREAD_ID,((ItemInfos)infosAdapter.getItem(position)).getSmsInfo().getThread_id());
 			startActivity(intent);
 		}
 	}

@@ -16,17 +16,19 @@ public class InfosPersonActivity extends FragmentActivity{
 	SMSInfoAdapter smsInfoAdapter;
 	
 	String name="";
+	long thread_id;
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_infos);
 		name=(String) getIntent().getSerializableExtra(Constants.NAME);
+		thread_id=getIntent().getLongExtra(Constants.THREAD_ID, 0);
 		
 		personText=(TextView) findViewById(R.id.head_center);
 		infoList=(ListView) findViewById(R.id.infos);
 		
 		
-		smsInfoAdapter=new SMSInfoAdapter(name,this);
+		smsInfoAdapter=new SMSInfoAdapter(name,thread_id,this);
 		infoList.setAdapter(smsInfoAdapter);
 		
 		personText.setText(name);

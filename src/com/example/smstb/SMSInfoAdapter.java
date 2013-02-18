@@ -23,11 +23,13 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 	List<SMSInfo> mInfos = new ArrayList<SMSInfo>();
 	private LayoutInflater mInflater;
 	private Context mContext;
-	private String mName="";
+	private long thread_id;
+	private String name;
 	
-	public SMSInfoAdapter(String name,Context context) {
-		mName=name;
+	public SMSInfoAdapter(String name,long thread_id,Context context) {
+		this.thread_id=thread_id;
 		mContext=context;
+		this.name=name;
 	}
 
 	public int getCount() {
@@ -90,7 +92,7 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 	}
 	
 	public void refreshData(){
-		mInfos=InfoUtil.getInfosByName(mName);
+		mInfos=InfoUtil.queryByThreadId(name, thread_id);
 		if(mInfos==null){
 			Log.i(TAG,"null");
 			return;
@@ -104,7 +106,7 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 		// TODO Auto-generated method stub
 		int id=mInfos.get(position).getId();
 		InfoUtil.deleteById(id);
-		mInfos=InfoUtil.getInfosByName(mName);
+//		mInfos=InfoUtil.getInfosByName(mName);
 		notifyDataSetChanged();
 	}
 

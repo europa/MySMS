@@ -80,9 +80,10 @@ public class ContentAdapter extends BaseAdapter implements ListInterface{
 		TextView draft;
 	}
 	
-	public void refreshData(){
+	public List<ItemInfos> refreshData(){
 		mData=InfoUtil.getInfosInPerson();
 		notifyDataSetChanged();
+		return mData;
 	}
 	
 	public void deleteItemById(int position){
