@@ -28,6 +28,11 @@ public class InfoUtil {
 		}
 		return infoUtil;
 	}
+	
+	/*
+	 * 暂时不用这个
+	 */
+	
 	public static String getSmsContent() {
 		Log.i(TAG,"before get content:"+System.currentTimeMillis());
 		infos.clear();
@@ -256,13 +261,11 @@ public class InfoUtil {
 	public static void deleteByThreadId(long thread_id){
 		String deleteUri="content://sms/";
 		mContext.getContentResolver().delete(Uri.parse(deleteUri),"thread_id="+thread_id, null);
-		getSmsContent();
 	}
 	
 	public static void deleteById(long id){
 		String deleteUri="content://sms/";
 		mContext.getContentResolver().delete(Uri.parse(deleteUri),"_id="+id, null);
-		getSmsContent();
 	}
 	
 	public static List<SMSInfo> queryByThreadId(String name,long thread_id){
@@ -346,9 +349,7 @@ public class InfoUtil {
 		value.put(TYPE,"3");
 		value.put(BODY, info.getContent());
 		context.getContentResolver().update(Uri.parse("content://sms"), value,ID+"="+info.getId(), null);
-		InfoUtil.getSmsContent();
 		Toast.makeText(context, R.string.save_draft,1000).show();
-		
 	}
 	
 	public static void insertDraft(SMSInfo info,Context context){
@@ -369,7 +370,6 @@ public class InfoUtil {
 		context.getContentResolver().insert(Uri.parse("content://sms"), value);
 		value.put(TYPE, "3");
 		context.getContentResolver().update(Uri.parse("content://sms"), value,"date="+time, null);
-		InfoUtil.getSmsContent();
 		Toast.makeText(context, R.string.save_draft,1000).show();
 	}
 }

@@ -24,7 +24,6 @@ public class MainActivity extends Activity{
 		InfoUtil infoUtil=InfoUtil.newInstance(this);
 		infosAdapter=new ContentAdapter(this);
 		infosListView.setAdapter(infosAdapter);
-		infosAdapter.refreshData();
 		infosListView.setOnItemClickListener(new ItemClickListener());
 		infosListView.setOnItemLongClickListener(new ListOnItemLongClickListener(this,infosAdapter));
 	}
@@ -33,6 +32,7 @@ public class MainActivity extends Activity{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		infosAdapter.refreshData();
 	}
 
 	private void findView() {

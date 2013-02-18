@@ -106,7 +106,7 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 		// TODO Auto-generated method stub
 		int id=mInfos.get(position).getId();
 		InfoUtil.deleteById(id);
-//		mInfos=InfoUtil.getInfosByName(mName);
+		mInfos.remove(position);
 		notifyDataSetChanged();
 	}
 

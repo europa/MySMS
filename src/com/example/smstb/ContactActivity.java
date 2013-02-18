@@ -111,13 +111,17 @@ public class ContactActivity extends FragmentActivity{
 		SparseBooleanArray items = contactListView.getCheckedItemPositions();
 		Log.i(TAG,"size:"+items.size());
 		for(int i=0;i<items.size();i++){
-			if(items.get(i)){
+			Log.i(TAG,i+"value:"+items.get(i));
+			Log.i(TAG,i+"key:"+items.keyAt(i));
+			Log.i(TAG,i+"values:"+items.valueAt(i));
+			if(items.valueAt(i)){
 				List<String> contact=new ArrayList<String>();
 				contact.add(allContacts.get(items.keyAt(i)).getName());
 				contact.add(allContacts.get(items.keyAt(i)).getPhoneNum());
 				contacts.add(contact);
 			}
 		}
+		Log.i(TAG,"con:"+contacts.size());
 	}
 
 

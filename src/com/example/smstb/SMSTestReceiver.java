@@ -27,6 +27,7 @@ public class SMSTestReceiver extends BroadcastReceiver{
 		Log.i(TAG,"deli");
 		NotificationManager nm=(NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 		Notification nn=new Notification();
+		nn.flags|=Notification.FLAG_AUTO_CANCEL;
 		Object[] pdus=(Object[]) bundle.get("pdus");
 		if(pdus!=null&&pdus.length!=0){
 			SmsMessage[] messages=new SmsMessage[pdus.length];

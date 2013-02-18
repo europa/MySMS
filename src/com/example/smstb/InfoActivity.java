@@ -91,7 +91,10 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 			mInfo.setContent(replyEdit.getText().toString());
 			InfoUtil.saveDraft(mInfo,this);
 		}else{
-			
+			if(mInfo.getType()==2){
+				InfoUtil.deleteById(mInfo.getId());
+				Toast.makeText(this, R.string.delete_draft, 1000).show();
+			}
 		}
 		unregisterReceiver(receiver);
 	}

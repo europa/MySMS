@@ -9,6 +9,7 @@
     <string name="tip">是否删除与该人的全部对话</string>
     <string name="delete_infos">删除与该人的聊天</string>
     <string name="delete_info">删除短信</string>
+    <string name="delete_draft">您的草稿已被删除</string>
     <string name="reply">回复</string>
     <string name="send">发送</string>
     <string name="not_null">您的短信内容为空</string>
