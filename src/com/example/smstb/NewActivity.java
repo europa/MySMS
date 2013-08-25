@@ -30,7 +30,6 @@ public class NewActivity extends FragmentActivity{
 	private List<List<String>> contacts=new ArrayList<List<String>>();
 
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_info);
 		

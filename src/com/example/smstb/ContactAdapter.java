@@ -23,8 +23,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,25 +45,21 @@ public class ContactAdapter extends BaseAdapter implements ListInterface{
 	}
 
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return mContacts.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return mContacts.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		if (mInflater == null) {
 			mInflater = LayoutInflater.from(mContext);
 		}
@@ -81,6 +81,7 @@ public class ContactAdapter extends BaseAdapter implements ListInterface{
 		viewHolder.deleteContactChkbox.setChecked(((ListView)parent).isItemChecked(position));
 		return view;
 	}
+	
 
 	class ViewHolder {
 		CheckBox deleteContactChkbox;
@@ -138,5 +139,4 @@ public class ContactAdapter extends BaseAdapter implements ListInterface{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }
