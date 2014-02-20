@@ -130,13 +130,11 @@ public class ContactAdapter extends BaseAdapter implements ListInterface{
 
 	@Override
 	public void deleteItemById(int position) {
-		// TODO Auto-generated method stub
 		notifyDataSetChanged();
 	}
 
 	@Override
 	public SMSInfo getInfoByPosition(int position) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

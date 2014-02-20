@@ -48,7 +48,6 @@ public class NewActivity extends FragmentActivity{
 	
 	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-		// TODO Auto-generated method stub
 		Log.i(TAG,"arg0:"+arg0+",arg1:"+arg1);
 		switch (arg1) {
 		case RESULT_OK:
@@ -70,7 +69,6 @@ public class NewActivity extends FragmentActivity{
 	}
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		if(autoCompleteTextView.getText().equals("")||replyEditText.getText().toString().trim().equals("")){
 			return;
@@ -85,7 +83,6 @@ public class NewActivity extends FragmentActivity{
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.send:
 				sendInfo();

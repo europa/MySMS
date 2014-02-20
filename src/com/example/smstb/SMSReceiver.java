@@ -22,7 +22,6 @@ public class SMSReceiver extends BroadcastReceiver{
 		this.dismissProgessInterface=dismissProgessInterface;
 	}
 	public void onReceive(Context context, Intent intent) {
-		// TODO Auto-generated method stub
 		switch(getResultCode()){
 		case Activity.RESULT_OK:
 			dismissProgessInterface.dismissProgress();

@@ -18,7 +18,6 @@ public class InfosPersonActivity extends FragmentActivity{
 	String name="";
 	long thread_id;
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_infos);
 		name=(String) getIntent().getSerializableExtra(Constants.NAME);
@@ -41,7 +40,6 @@ public class InfosPersonActivity extends FragmentActivity{
 	
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		smsInfoAdapter.refreshData();
 		super.onResume();
 	}
@@ -51,7 +49,6 @@ public class InfosPersonActivity extends FragmentActivity{
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			// TODO Auto-generated method stub
 			Intent intent=new Intent();
 			intent.setClass(InfosPersonActivity.this, InfoActivity.class);
 			intent.putExtra(Constants.INFO,(SMSInfo)smsInfoAdapter.getItem(position));

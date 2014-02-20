@@ -17,7 +17,6 @@ import android.util.Log;
 public class SMSTestReceiver extends BroadcastReceiver{
 	private static final String TAG="SMSTestReceiver";
 	public void onReceive(Context context, Intent intent) {
-		// TODO Auto-generated method stub
 		Log.i(TAG,"con:"+context.toString());
 		switch(getResultCode()){
 		case Activity.RESULT_OK:

@@ -33,25 +33,21 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 	}
 
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return mInfos.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return mInfos.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		if (mInflater == null) {
 			mInflater = LayoutInflater.from(mContext);
 		}
@@ -103,7 +99,6 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 
 	@Override
 	public void deleteItemById(int position) {
-		// TODO Auto-generated method stub
 		int id=mInfos.get(position).getId();
 		InfoUtil.deleteById(id);
 		mInfos.remove(position);
@@ -112,7 +107,6 @@ public class SMSInfoAdapter extends BaseAdapter implements ListInterface{
 
 	@Override
 	public SMSInfo getInfoByPosition(int position) {
-		// TODO Auto-generated method stub
 		return mInfos.get(position);
 	}
 	

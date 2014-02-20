@@ -41,7 +41,6 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 	private SMSReceiver receiver;
 	
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_info);
 		mInfo=(SMSInfo) getIntent().getSerializableExtra(Constants.INFO);
@@ -79,7 +78,6 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 	
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		receiver=new SMSReceiver(this);
 		registerReceiver(receiver, new IntentFilter(Constants.SMS_SEND_ACTION));
@@ -103,8 +101,6 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 
 	@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			
 			sendInfo();
 		}
 	}

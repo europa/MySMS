@@ -74,13 +74,11 @@ public class ContactActivity extends FragmentActivity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			getSelectedContacts();
 			Intent intent = new Intent();
@@ -115,7 +113,6 @@ public class ContactActivity extends FragmentActivity {
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 		}
 	}
 }

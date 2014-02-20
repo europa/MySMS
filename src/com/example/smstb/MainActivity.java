@@ -30,7 +30,6 @@ public class MainActivity extends Activity{
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		infosAdapter.refreshData();
 	}
@@ -43,7 +42,6 @@ public class MainActivity extends Activity{
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			// TODO Auto-generated method stub
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, InfosPersonActivity.class);
 			intent.putExtra(Constants.NAME,((ItemInfos)infosAdapter.getItem(position)).getSmsInfo().getName());

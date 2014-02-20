@@ -19,7 +19,6 @@ public class ListOnItemLongClickListener implements OnItemLongClickListener{
 	}	
 		@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-			// TODO Auto-generated method stub
 			String str[] = new String[2];
 			if(mContext instanceof MainActivity){
 				str[0] = mContext.getResources().getString(R.string.delete_infos);
@@ -32,7 +31,6 @@ public class ListOnItemLongClickListener implements OnItemLongClickListener{
 				
 				@Override
 				public void operate(int which) {
-					// TODO Auto-generated method stub
 					switch(which){
 					case 0:
 						if(mContext instanceof MainActivity){
@@ -54,7 +52,6 @@ public class ListOnItemLongClickListener implements OnItemLongClickListener{
 		DialogUtil.createAlertDialog(mContext, R.string.prompt, str, new AlertDialogOperate() {
 			@Override
 			public void operate() {
-				// TODO Auto-generated method stub
 				listInterface.deleteItemById(position);
 			}
 		});

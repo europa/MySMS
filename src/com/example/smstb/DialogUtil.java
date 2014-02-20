@@ -24,7 +24,6 @@ public class DialogUtil {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					Log.i(TAG,"w:"+which);
 					callback.operate();
 					dialog.dismiss();
@@ -34,7 +33,6 @@ public class DialogUtil {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					dialog.dismiss();
 				}
 			}).create().show();
@@ -47,7 +45,6 @@ public class DialogUtil {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					callback.operate(which);
 					Log.i(TAG,"Dw:"+which);
 				}
