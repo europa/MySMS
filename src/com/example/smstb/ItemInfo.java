@@ -1,29 +1,24 @@
 package com.example.smstb;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import android.os.Parcelable;
 
 public class ItemInfo implements Serializable{
 	private SMSInfo smsInfo;
-	private long lastTime;
-
+	private int amount;
+	
 	public SMSInfo getSmsInfo() {
-		return  smsInfo;
+		return smsInfo;
 	}
 
 	public void setSmsInfo(SMSInfo smsInfo) {
 		this.smsInfo = smsInfo;
 	}
 
-	public long getLastTime() {
-		return lastTime;
+	public int getAmount() {
+		return amount;
 	}
 
-	public void setLastTime(long lastTime) {
-		this.lastTime = lastTime;
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
-	
 }

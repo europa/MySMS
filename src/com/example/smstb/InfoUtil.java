@@ -136,11 +136,11 @@ public class InfoUtil {
 		return smsBuilder.toString();
 	}
 
-	public static List<ItemInfos> getInfosInPerson() {
+	public static List<ItemInfo> getInfosInPerson() {
 		Log.i(TAG,"before get in:"+System.currentTimeMillis());
 		final String SMS_URI_ALL = "content://sms/";
 		List<Long> threadIds = new ArrayList<Long>();
-		List<ItemInfos> itemInfoss = new ArrayList<ItemInfos>();
+		List<ItemInfo> itemInfos = new ArrayList<ItemInfo>();
 		try {
 			Uri uri = Uri.parse(SMS_URI_ALL);
 			String[] projection = { "_id","thread_id", "address",  "body", "date", "type" };
@@ -156,11 +156,11 @@ public class InfoUtil {
 				
 					long thread=cursor.getLong(index_thread);
 					SMSInfo info = new SMSInfo();
-					ItemInfos itemInfos=new ItemInfos();
+					ItemInfo itemInfo=new ItemInfo();
 					if(threadIds.contains(thread)){
-						itemInfos=itemInfoss.get(threadIds.indexOf(thread));
-						int amount=itemInfos.getAmount()+1;
-						itemInfoss.get(threadIds.indexOf(thread)).setAmount(amount);
+						itemInfo=itemInfos.get(threadIds.indexOf(thread));
+						int amount=itemInfo.getAmount()+1;
+						itemInfos.get(threadIds.indexOf(thread)).setAmount(amount);
 						continue;
 					}
 					int id=cursor.getInt(index_id);
@@ -201,9 +201,9 @@ public class InfoUtil {
 						continue;
 					}
 					
-					itemInfos.setSmsInfo(info);
-					itemInfos.setAmount(1);
-					itemInfoss.add(itemInfos);
+					itemInfo.setSmsInfo(info);
+					itemInfo.setAmount(1);
+					itemInfos.add(itemInfo);
 				} while (cursor.moveToNext());
 				if (!cursor.isClosed()) {
 					cursor.close();
@@ -216,9 +216,8 @@ public class InfoUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for(int i=0;i<itemInfoss.size();i++){
-			Log.i(TAG,"i:"+i);
-			String name = itemInfoss.get(i).getSmsInfo().getPhoneNum();
+		for(int i=0;i<itemInfos.size();i++){
+			String name = itemInfos.get(i).getSmsInfo().getPhoneNum();
 			Uri personUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
 					name);
 			Cursor cursor = mContext.getContentResolver().query(personUri,
@@ -227,18 +226,18 @@ public class InfoUtil {
 				int nameId = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME);
 				String phoneName=cursor.getString(nameId);
 				if(phoneName==null||phoneName.equals("")){
-					itemInfoss.get(i).getSmsInfo().setName(name);
+					itemInfos.get(i).getSmsInfo().setName(name);
 				}else{
-					itemInfoss.get(i).getSmsInfo().setName(phoneName);
+					itemInfos.get(i).getSmsInfo().setName(phoneName);
 				}
 			}else{
 				//有号码，但不在联系人中的
-				itemInfoss.get(i).getSmsInfo().setName(name);
+				itemInfos.get(i).getSmsInfo().setName(name);
 			}
-			Log.i(TAG,"name:"+itemInfoss.get(i).getSmsInfo().getName()); cursor.close();
+			Log.i(TAG,"name:"+itemInfos.get(i).getSmsInfo().getName()); cursor.close();
 		}
 		Log.i(TAG,"after get in:"+System.currentTimeMillis());
-		return itemInfoss;
+		return itemInfos;
 	}
 
 	public static String getInfosByPhoneNum(String phoneNum){

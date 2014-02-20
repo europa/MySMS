@@ -2,9 +2,6 @@ package com.example.smstb;
 
 import java.io.Serializable;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 public class SMSInfo implements Serializable{
 	private int id;
 	private String phoneNum;

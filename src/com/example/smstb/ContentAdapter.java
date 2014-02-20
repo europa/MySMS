@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class ContentAdapter extends BaseAdapter implements ListInterface{
 
 	private static final String TAG="ContentAdapter";
-	private List<ItemInfos> mData = new ArrayList<ItemInfos>();
+	private List<ItemInfo> mData = new ArrayList<ItemInfo>();
 	private LayoutInflater mInflater;
 	private Context mContext;
 
@@ -76,14 +76,14 @@ public class ContentAdapter extends BaseAdapter implements ListInterface{
 		TextView draft;
 	}
 	
-	public List<ItemInfos> refreshData(){
+	public List<ItemInfo> refreshData(){
 		mData=InfoUtil.getInfosInPerson();
 		notifyDataSetChanged();
 		return mData;
 	}
 	
 	public void deleteItemById(int position){
-		long thread_id=((ItemInfos)getItem(position)).getSmsInfo().getThread_id();
+		long thread_id=((ItemInfo)getItem(position)).getSmsInfo().getThread_id();
 		InfoUtil.deleteByThreadId(thread_id);
 		mData=InfoUtil.getInfosInPerson();
 		notifyDataSetChanged();

@@ -44,8 +44,8 @@ public class MainActivity extends Activity{
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, InfosPersonActivity.class);
-			intent.putExtra(Constants.NAME,((ItemInfos)infosAdapter.getItem(position)).getSmsInfo().getName());
-			intent.putExtra(Constants.THREAD_ID,((ItemInfos)infosAdapter.getItem(position)).getSmsInfo().getThread_id());
+			intent.putExtra(Constants.NAME,((ItemInfo)infosAdapter.getItem(position)).getSmsInfo().getName());
+			intent.putExtra(Constants.THREAD_ID,((ItemInfo)infosAdapter.getItem(position)).getSmsInfo().getThread_id());
 			startActivity(intent);
 		}
 	}
