@@ -31,6 +31,7 @@ public class MainActivity extends Activity{
 	@Override
 	protected void onResume() {
 		super.onResume();
+		InfoUtil.getItemsByPerson();
 		infosAdapter.refreshData();
 	}
 
