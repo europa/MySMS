@@ -1,4 +1,9 @@
-package com.example.smstb;
+package com.example.smstb.util;
+
+import com.example.smstb.R;
+import com.example.smstb.R.string;
+import com.example.smstb.iinterface.AlertDialogOperate;
+import com.example.smstb.iinterface.AlertDialogOperateByPosition;
 
 import android.app.AlertDialog;
 import android.content.Context;

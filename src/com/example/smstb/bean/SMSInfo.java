@@ -1,4 +1,4 @@
-package com.example.smstb;
+package com.example.smstb.bean;
 
 import java.io.Serializable;
 

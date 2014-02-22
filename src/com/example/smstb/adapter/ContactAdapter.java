@@ -1,4 +1,4 @@
-package com.example.smstb;
+package com.example.smstb.adapter;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -6,7 +6,14 @@ import java.util.List;
 
 import javax.security.auth.PrivateCredentialPermission;
 
-import com.example.smstb.ContentAdapter.ViewHolder;
+import com.example.smstb.R;
+import com.example.smstb.R.id;
+import com.example.smstb.R.layout;
+import com.example.smstb.adapter.ContentAdapter.ViewHolder;
+import com.example.smstb.bean.Contact;
+import com.example.smstb.bean.SMSInfo;
+import com.example.smstb.iinterface.ListInterface;
+import com.example.smstb.util.Constants;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

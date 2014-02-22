@@ -1,9 +1,14 @@
-package com.example.smstb;
+package com.example.smstb.util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.example.smstb.R;
+import com.example.smstb.R.string;
+import com.example.smstb.bean.ItemInfo;
+import com.example.smstb.bean.SMSInfo;
 
 import android.R.integer;
 import android.content.ContentValues;
@@ -265,7 +270,7 @@ public class InfoUtil {
 		Uri MSG_QUERY_URI = Uri.withAppendedPath(MMS_SMS_URI, "conversations")
 				.buildUpon().appendQueryParameter("simple", "true").build();
 		String[] projection = { "_id", "recipient_ids", "snippet", "date",
-				"has_attachment", "snippet_cs", "message_count" };
+				"has_attachment", "snippet_cs", "message_count","read"};
 		Cursor cursor = mContext.getContentResolver().query(MSG_QUERY_URI,
 				projection, null, null, "date desc");
 		if (cursor.moveToFirst()) {
@@ -284,6 +289,7 @@ public class InfoUtil {
 						+ cursor.getLong(cursor.getColumnIndex("snippet_cs"));
 				String message_count = ""
 						+ cursor.getLong(cursor.getColumnIndex("message_count"));
+				cursor.getLong(cursor.getColumnIndex("read"));
 				Log.i(TAG, "id:" + id + ",recipient_id:" + recipient_id
 						+ ",snippet:" + snippet + ",date:" + date
 						+ ",has_attachment:" + has_attachment + ",snippet_cs:"

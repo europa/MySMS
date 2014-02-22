@@ -1,4 +1,12 @@
-package com.example.smstb;
+package com.example.smstb.ui.activity;
+
+import com.example.smstb.ListOnItemLongClickListener;
+import com.example.smstb.R;
+import com.example.smstb.R.id;
+import com.example.smstb.R.layout;
+import com.example.smstb.adapter.SMSInfoAdapter;
+import com.example.smstb.bean.SMSInfo;
+import com.example.smstb.util.Constants;
 
 import android.content.Intent;
 import android.os.Bundle;

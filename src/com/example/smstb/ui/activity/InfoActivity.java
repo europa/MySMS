@@ -1,7 +1,17 @@
-package com.example.smstb;
+package com.example.smstb.ui.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.smstb.R;
+import com.example.smstb.SMSReceiver;
+import com.example.smstb.R.id;
+import com.example.smstb.R.layout;
+import com.example.smstb.R.string;
+import com.example.smstb.bean.SMSInfo;
+import com.example.smstb.iinterface.DismissProgessInterface;
+import com.example.smstb.util.Constants;
+import com.example.smstb.util.InfoUtil;
 
 import android.app.Activity;
 import android.app.PendingIntent;

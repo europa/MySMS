@@ -1,6 +1,7 @@
-package com.example.smstb;
+package com.example.smstb.bean;
 
 import java.io.Serializable;
+
 
 public class ItemInfo implements Serializable{
 	private SMSInfo smsInfo;

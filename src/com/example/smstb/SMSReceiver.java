@@ -3,6 +3,8 @@ package com.example.smstb;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.example.smstb.iinterface.DismissProgessInterface;
+
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;

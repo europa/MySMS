@@ -18,7 +18,7 @@
         </receiver>
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.smstb.ui.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
             <intent-filter>
@@ -28,25 +28,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ItemActivity"
+            android:name="com.example.smstb.ui.activity.InfosPersonActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
         <activity
-            android:name="InfosPersonActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
-        </activity>
-        <activity
-            android:name="InfoActivity"
+            android:name="com.example.smstb.ui.activity.InfoActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
         <activity
-            android:name="NewActivity"
+            android:name="com.example.smstb.ui.activity.NewActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
         <activity
-            android:name="ContactActivity"
+            android:name="com.example.smstb.ui.activity.ContactActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>

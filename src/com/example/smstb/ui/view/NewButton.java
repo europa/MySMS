@@ -1,7 +1,9 @@
 /**
  * 
  */
-package com.example.smstb;
+package com.example.smstb.ui.view;
+
+import com.example.smstb.ui.activity.NewActivity;
 
 import android.app.Activity;
 import android.content.Context;

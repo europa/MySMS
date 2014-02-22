@@ -1,7 +1,15 @@
-package com.example.smstb;
+package com.example.smstb.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.smstb.R;
+import com.example.smstb.R.id;
+import com.example.smstb.R.layout;
+import com.example.smstb.bean.ItemInfo;
+import com.example.smstb.bean.SMSInfo;
+import com.example.smstb.iinterface.ListInterface;
+import com.example.smstb.util.InfoUtil;
 
 import android.content.Context;
 import android.util.Log;

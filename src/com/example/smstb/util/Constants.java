@@ -1,4 +1,4 @@
-package com.example.smstb;
+package com.example.smstb.util;
 
 public class Constants {
 	public static final String INFOS="INFOS";
