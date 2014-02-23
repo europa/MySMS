@@ -1,28 +1,19 @@
 package com.example.smstb.ui.activity;
 
 
-import com.example.smstb.ListOnItemLongClickListener;
-import com.example.smstb.R;
-import com.example.smstb.R.id;
-import com.example.smstb.R.layout;
-import com.example.smstb.adapter.ContentAdapter;
-import com.example.smstb.bean.ItemInfo;
-import com.example.smstb.util.Constants;
-import com.example.smstb.util.InfoUtil;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class MainActivity extends Activity{
-	private final static String TAG = "MainActivity";
+import com.example.smstb.R;
+import com.example.smstb.ui.adapter.ContentAdapter;
+import com.example.smstb.util.Constants;
+import com.example.smstb.util.InfoUtil;
 
-	private LayoutInflater mInflater;
+public class MainActivity extends BaseActivity{
 	private ListView infosListView;
 	private ContentAdapter infosAdapter;
 
@@ -31,17 +22,16 @@ public class MainActivity extends Activity{
 		setContentView(R.layout.layout_main);
 		findView();
 		InfoUtil infoUtil=InfoUtil.newInstance(this);
-		infosAdapter=new ContentAdapter(this);
+		infosAdapter=new ContentAdapter(InfoUtil.getItemsByPerson(),this);
 		infosListView.setAdapter(infosAdapter);
 		infosListView.setOnItemClickListener(new ItemClickListener());
-		infosListView.setOnItemLongClickListener(new ListOnItemLongClickListener(this,infosAdapter));
 	}
 
 	@Override
 	protected void onResume() {
+		infosAdapter.list=InfoUtil.getItemsByPerson();
+		infosAdapter.notifyDataSetChanged();
 		super.onResume();
-		InfoUtil.getItemsByPerson();
-		infosAdapter.refreshData();
 	}
 
 	private void findView() {
@@ -54,8 +44,9 @@ public class MainActivity extends Activity{
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, InfosPersonActivity.class);
-			intent.putExtra(Constants.NAME,((ItemInfo)infosAdapter.getItem(position)).getSmsInfo().getName());
-			intent.putExtra(Constants.THREAD_ID,((ItemInfo)infosAdapter.getItem(position)).getSmsInfo().getThread_id());
+			brain.setCurrentConversation(infosAdapter.getItem(position));
+			intent.putExtra(Constants.NAME,infosAdapter.convertToName(infosAdapter.getItem(position).getRecipient_ids()));
+			intent.putExtra(Constants.THREAD_ID,infosAdapter.getItem(position).getId());
 			startActivity(intent);
 		}
 	}

@@ -1,13 +1,5 @@
 package com.example.smstb;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.example.smstb.bean.SMSInfo;
-import com.example.smstb.ui.activity.InfoActivity;
-import com.example.smstb.util.Constants;
-import com.example.smstb.util.InfoUtil;
-
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -18,6 +10,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+
+import com.example.smstb.bean.SMSInfo;
+import com.example.smstb.ui.activity.InfoActivity;
+import com.example.smstb.util.Constants;
 
 public class SMSTestReceiver extends BroadcastReceiver{
 	private static final String TAG="SMSTestReceiver";
@@ -46,16 +42,11 @@ public class SMSTestReceiver extends BroadcastReceiver{
 				
 				String phoneNum=message.getDisplayOriginatingAddress();
 				String content=message.getMessageBody();
-				String name=InfoUtil.getInfosByPhoneNum(phoneNum);
 				long date=message.getTimestampMillis();
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-				Date d = new Date(date);
-				String dateStr = format.format(d);
-				info.setContent(content);
-				info.setPhoneNum(phoneNum);
-				info.setoTime(date);
-				info.setTime(dateStr);
-				info.setName(name);
+				info.setBody(content);
+				info.setAddress(phoneNum);
+				info.setDate(date);
+				
 				sendIntent.putExtra(Constants.INFO, info);
 				
 				PendingIntent pendIntent=PendingIntent.getActivity(context, 0, sendIntent, 0);

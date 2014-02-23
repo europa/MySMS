@@ -1,15 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/root" >
-    <include layout="@layout/layout_head"
+    android:layout_height="match_parent" >
+
+    <include
         android:layout_below="@id/root"
-        />
+        layout="@layout/layout_head" />
+
     <ListView
+        android:id="@+id/infoList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/head"
-        android:id="@+id/infoList"/>
+        android:dividerHeight="1.5dp" />
+
     <EditText
         android:id="@+id/reply"
         android:layout_width="fill_parent"

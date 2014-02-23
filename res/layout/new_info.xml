@@ -9,13 +9,13 @@
         android:layout_height="44dp"
         android:background="@color/head"
         android:orientation="vertical" >
+
         <TextView
             android:id="@+id/head_left"
-            android:visibility="gone"
             style="@style/title_left_btn_style"
-            android:text="@string/new_info" />
+            android:text="@string/new_info"
+            android:visibility="gone" />
 
-       
         <TextView
             android:id="@+id/head_center"
             style="@style/title_center_btn_style"
@@ -23,36 +23,36 @@
 
         <TextView
             android:id="@+id/head_right"
-            android:visibility="gone"
             style="@style/title_right_btn_style"
-            android:text="@string/new_sms" />
+            android:text="@string/new_sms"
+            android:visibility="gone" />
     </RelativeLayout>
 
-   <LinearLayout 
-       android:layout_width="fill_parent"
-       android:layout_height="0dp"
-       android:layout_weight="1" 
-       android:orientation="horizontal">
-            <TextView 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/addressee"/>
-            <AutoCompleteTextView 
-	            android:id="@+id/contact"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:inputType="phone"
-	            />
-            <Button 
-                android:id="@+id/contactBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/contact"
-                />
-   </LinearLayout> 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/addressee" />
+
+        <EditText
+            android:id="@+id/contact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/contactBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/contact" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"

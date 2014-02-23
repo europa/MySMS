@@ -12,9 +12,9 @@
 
         <TextView
             android:id="@+id/head_left"
-            android:visibility="gone"
             style="@style/title_left_btn_style"
-            android:text="@string/lastway" />
+            android:text="@string/lastway"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/head_center"
@@ -30,7 +30,39 @@
     <ListView
         android:id="@+id/infos"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:listSelector="@android:color/transparent"
+        android:splitMotionEvents="true" >
     </ListView>
+
+    <LinearLayout
+        android:id="@+id/replyLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0" >
+
+        <ImageButton
+            android:id="@+id/contactImgBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@drawable/contact"
+            android:onClick="onClick" />
+
+        <EditText
+            android:id="@+id/replyEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/sendImgBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/send"
+            android:onClick="onClick" />
+    </LinearLayout>
 
 </LinearLayout>

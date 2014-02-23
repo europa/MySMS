@@ -36,9 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InfoActivity extends FragmentActivity implements DismissProgessInterface{
-
-	private static String TAG="InfoActivity ";
+public class InfoActivity extends BaseActivity implements DismissProgessInterface{
 	private TextView personText,infoText,infoPerson,sendInfo;
 	private SMSInfo mInfo;
 	private Button sendBtn;
@@ -64,8 +62,8 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 		sendProgressBar=(ProgressBar) findViewById(R.id.sendProgress);
 		progressLayout=(LinearLayout) findViewById(R.id.progressLayout);
 		
-		phoneNum=mInfo.getPhoneNum();
-		name=mInfo.getName();
+		phoneNum=mInfo.getAddress();
+		name=phoneNum;
 		if(phoneNum.equals(name)){
 			personText.setText(phoneNum);
 		}else{
@@ -73,14 +71,12 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 		}
 		if(mInfo.getType()==1){
 			infoPerson.setText(R.string.me);
-			infoText.setText(mInfo.getContent());
 		}else if(mInfo.getType()==2){
 			infoText.setText("");
-			replyEdit.setText(mInfo.getContent());
 		}else{
 			infoPerson.setText(name+"：");
-			infoText.setText(mInfo.getContent());
 		}
+			infoText.setText(mInfo.getBody());
 		
 		sendBtn.setOnClickListener(new SendOnClickListener());
 	}
@@ -96,7 +92,7 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 	protected void onPause(){
 		super.onPause();
 		if(replyEdit.getText()!=null&&replyEdit.getText().equals("")){
-			mInfo.setContent(replyEdit.getText().toString());
+			mInfo.setBody(replyEdit.getText().toString());
 			InfoUtil.saveDraft(mInfo,this);
 		}else{
 			if(mInfo.getType()==2){
@@ -154,7 +150,6 @@ public class InfoActivity extends FragmentActivity implements DismissProgessInte
 		value.put(BODY, reply);
 		
 		getContentResolver().insert(Uri.parse("content://sms"), value);
-		InfoUtil.getSmsContent();
 	}
 	
 	public void dismissProgress(){

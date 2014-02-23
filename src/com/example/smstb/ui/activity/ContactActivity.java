@@ -1,22 +1,10 @@
 package com.example.smstb.ui.activity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.smstb.R;
-import com.example.smstb.R.id;
-import com.example.smstb.R.layout;
-import com.example.smstb.adapter.ContactAdapter;
-import com.example.smstb.bean.Contact;
-import com.example.smstb.util.Constants;
-
-import android.app.Activity;
 import android.content.Intent;
-import android.database.CursorJoiner.Result;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,11 +14,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ContactActivity extends FragmentActivity {
+import com.example.smstb.R;
+import com.example.smstb.bean.Contact;
+import com.example.smstb.ui.adapter.ContactAdapter;
+import com.example.smstb.ui.adapter.PinyinAdapter;
+import com.example.smstb.util.InfoUtil;
 
-	private static final String TAG = "ContactActivity";
+public class ContactActivity extends BaseActivity {
+
+	private ListView pinyinListView;
 	private ListView contactListView;
 	private ContactAdapter contactAdapter;
+	private PinyinAdapter pinyinAdapter;
 	private List<List<String>> contacts = new ArrayList<List<String>>();
 	private List<Contact> allContacts = new ArrayList<Contact>();
 	private List<Boolean> selectedContact = new ArrayList<Boolean>();
@@ -41,10 +36,14 @@ public class ContactActivity extends FragmentActivity {
 		setContentView(R.layout.layout_contact);
 
 		findView();
-		contactAdapter = new ContactAdapter(this);
-		allContacts = contactAdapter.refreshData();
+		if (brain.getContacts().size() == 0) {
+			brain.setContacts(InfoUtil.getContacts());
+		}
+		contactAdapter = new ContactAdapter(brain.getContacts(), this);
+		pinyinAdapter = new PinyinAdapter(brain.getPinyinList(), this);
 		contactListView.setItemsCanFocus(true);
 		contactListView.setAdapter(contactAdapter);
+		pinyinListView.setAdapter(pinyinAdapter);
 
 		sureTextView.setOnClickListener(new OnClickListener() {
 
@@ -52,13 +51,7 @@ public class ContactActivity extends FragmentActivity {
 			public void onClick(View v) {
 				getSelectedContacts();
 				Intent intent = new Intent();
-				intent.setClass(ContactActivity.this, NewActivity.class);
-				intent.putExtra(Constants.CONTACTS, (Serializable) contacts);
-				if (getParent() == null) {
-					setResult(Activity.RESULT_OK, intent);
-				} else {
-					getParent().setResult(Activity.RESULT_OK, intent);
-				}
+				setResult(RESULT_OK);
 				ContactActivity.this.finish();
 			}
 		});
@@ -72,11 +65,36 @@ public class ContactActivity extends FragmentActivity {
 			}
 
 		});
+		pinyinListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				String pinyin = pinyinAdapter.getItem(arg2);
+				for (Contact contact : contactAdapter.list) {
+					if (contact.getPinYin().startsWith(pinyin)) {
+						contactListView.setSelectionFromTop(
+								contactAdapter.list.indexOf(contact), 10);
+						break;
+					}
+				}
+			}
+
+		});
 	}
 
 	private void findView() {
 		contactListView = (ListView) findViewById(R.id.contact);
+		pinyinListView = (ListView) findViewById(R.id.pinyinListView);
 		sureTextView = (TextView) findViewById(R.id.sure);
+	}
+
+	@Override
+	protected void onResume() {
+		List<Contact> selectedContacts=brain.getSelectedContacts();
+		for(Contact contact:selectedContacts){
+			contactListView.setItemChecked(contactAdapter.list.indexOf(contact),true);
+		}
+		super.onResume();
 	}
 
 	@Override
@@ -87,11 +105,6 @@ public class ContactActivity extends FragmentActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			getSelectedContacts();
-			Intent intent = new Intent();
-			intent.setClass(this, NewActivity.class);
-			intent.putExtra(Constants.CONTACTS, (Serializable) contacts);
-			setResult(RESULT_OK, intent);
 			finish();
 			return true;
 		}
@@ -101,19 +114,13 @@ public class ContactActivity extends FragmentActivity {
 	private void getSelectedContacts() {
 		// 只要被check过，就会在items里，items里并不都是true
 		SparseBooleanArray items = contactListView.getCheckedItemPositions();
-		Log.i(TAG, "size:" + items.size());
+		List<Contact> selectedContacts=new ArrayList<Contact>();
 		for (int i = 0; i < items.size(); i++) {
-			Log.i(TAG, i + "value:" + items.get(i));
-			Log.i(TAG, i + "key:" + items.keyAt(i));
-			Log.i(TAG, i + "values:" + items.valueAt(i));
 			if (items.valueAt(i)) {
-				List<String> contact = new ArrayList<String>();
-				contact.add(allContacts.get(items.keyAt(i)).getName());
-				contact.add(allContacts.get(items.keyAt(i)).getPhoneNum());
-				contacts.add(contact);
+				selectedContacts.add(contactAdapter.list.get(items.keyAt(i)));
 			}
 		}
-		Log.i(TAG, "con:" + contacts.size());
+		brain.setSelectedContacts(selectedContacts);
 	}
 
 	class SendOnClickListener implements OnClickListener {
