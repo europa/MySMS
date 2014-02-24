@@ -13,4 +13,10 @@ public class Constants {
 	public static final int PHONE_NUMBER_INDEX=1;
 	public static final int PHONE_PHOTO_ID_INDEX=2;
 	public static final int PHONE_CONTACT_ID_INDEX=3;
+	
+	public static final int CODE=0;
+	public static final int SENT=2;
+	public static final int INBOX=1;
+	public static final int DRAFT=3;
+	public static final int FAILED=4;
 }

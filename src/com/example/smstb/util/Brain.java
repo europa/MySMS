@@ -5,10 +5,9 @@ import java.util.List;
 
 import com.example.smstb.bean.Contact;
 import com.example.smstb.bean.Conversation;
+import com.example.smstb.bean.SMSInfo;
 
 public class Brain {
-
-	
 	private static Brain brain = null;
 
 	private Brain() {
@@ -24,6 +23,7 @@ public class Brain {
 	private Conversation currentConversation;
 	private List<Contact> contacts=new ArrayList<Contact>();
 	private List<Contact> selectedContacts=new ArrayList<Contact>();
+	private List<SMSInfo> infos=new ArrayList<SMSInfo>();
 
 	public Conversation getCurrentConversation() {
 		return currentConversation;
@@ -80,5 +80,26 @@ public class Brain {
 	public void setSelectedContacts(List<Contact> selectedContacts) {
 		this.selectedContacts = selectedContacts;
 	}
+	
+	/**
+	 * 
+	 * @param name:contactEdit's contact item
+	 * @return the name's phoneNum
+	 */
+	public String getContactByName(String name){
+		for(Contact contact:contacts){
+			if(contact.getName().equals(name)){
+				return contact.getPhoneNum();
+			}
+		}
+		return name;
+	}
+	public List<SMSInfo> getInfos() {
+		return infos;
+	}
 
+	public void setInfos(List<SMSInfo> infos) {
+		this.infos = infos;
+	}
+	
 }

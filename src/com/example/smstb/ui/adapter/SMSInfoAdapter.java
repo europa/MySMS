@@ -35,7 +35,9 @@ public class SMSInfoAdapter extends ToolAdapter<SMSInfo> implements
 
 	@Override
 	public int getViewTypeCount() {
-		return list.size();
+//		return list.size();
+		int size=list.size();
+		return size<1?1:size;
 	}
 
 	@Override
@@ -57,7 +59,7 @@ public class SMSInfoAdapter extends ToolAdapter<SMSInfo> implements
 		} else {
 			viewHolder = (ViewHolder) view.getTag();
 		}
-		viewHolder.contentTextView.setText(info.getBody());
+		viewHolder.contentTextView.setText(info.getBody()+type);
 		return view;
 	}
 

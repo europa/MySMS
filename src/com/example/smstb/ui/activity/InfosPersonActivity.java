@@ -1,11 +1,11 @@
 package com.example.smstb.ui.activity;
 
-import android.app.PendingIntent;
-import android.content.ContentValues;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.telephony.gsm.SmsManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -21,7 +21,9 @@ import com.example.smstb.ui.adapter.SMSInfoAdapter;
 import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
-public class InfosPersonActivity extends BaseActivity {
+public class InfosPersonActivity extends SendBaseActivity {
+
+
 	private TextView personText;
 	private ListView infoList;
 	SMSInfoAdapter smsInfoAdapter;
@@ -38,8 +40,12 @@ public class InfosPersonActivity extends BaseActivity {
 		sendImgBtn = (ImageButton) findViewById(R.id.sendImgBtn);
 		replyEditText = (EditText) findViewById(R.id.replyEdit);
 
-		smsInfoAdapter = new SMSInfoAdapter(InfoUtil.queryByThreadId(brain
-				.getCurrentThreadId()), this);
+		brain.setInfos(InfoUtil.queryByThreadId(brain.getCurrentThreadId()));
+		draft=getDraft();
+		if(draft!=null){
+			replyEditText.setText(draft.getBody());
+		}
+		smsInfoAdapter = new SMSInfoAdapter(brain.getInfos(), this);
 		infoList.setAdapter(smsInfoAdapter);
 		personText.setText(brain.getCurrentName());
 	}
@@ -50,7 +56,7 @@ public class InfosPersonActivity extends BaseActivity {
 
 			break;
 		case R.id.sendImgBtn:
-			sendInfo();
+			handleInfo();
 			break;
 
 		default:
@@ -61,8 +67,22 @@ public class InfosPersonActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 	}
-
+	@Override
+	protected void onPause() {
+		String reply=replyEditText.getText().toString();
+		if((draft==null&&!reply.trim().equals(""))||(draft!=null&&(!reply.trim().equals("")))){
+			String id=brain.getCurrentConversation().getRecipient_ids().split(" ")[0];
+			info.setAddress(InfoUtil.getPhoneNum(Integer.parseInt(id)));
+			info.setType(Constants.DRAFT);
+			info.setBody(reply);
+			InfoUtil.insertInfo(this, info);
+		}else if(draft!=null&&reply.trim().equals("")){
+			InfoUtil.deleteById(draft.getId());
+		}
+		super.onPause();
+	}
 	class InfoOnItemClickListener implements OnItemClickListener {
 
 		@Override
@@ -76,48 +96,32 @@ public class InfosPersonActivity extends BaseActivity {
 		}
 	}
 
-	private void sendInfo() {
+	private void handleInfo() {
 		String reply = replyEditText.getText().toString();
 		if (reply.equals("")) {
 			Toast.makeText(this, R.string.not_null, 1000).show();
 		} else {
 			for (String id:brain.getCurrentConversation().getRecipient_ids().split(" ")) {
-				String phoneNum=InfoUtil.getPhoneNum(Integer.parseInt(id));
-				insertInfo(phoneNum, reply);
-				Intent itSend = new Intent(Constants.SMS_SEND_ACTION);
-
-				itSend.putExtra(Constants.NAME,phoneNum );
-				Intent itDeliver = new Intent(Constants.SMS_DELIVERED_ACTION);
-				PendingIntent sendPi = PendingIntent.getActivity(this, 0,
-						itSend, 0);
-				PendingIntent deliverPi = PendingIntent.getActivity(this, 0,
-						itDeliver, 0);
-				SmsManager manager = SmsManager.getDefault();
-				manager.sendTextMessage(phoneNum, null, reply, sendPi, deliverPi);
+				info.setAddress(InfoUtil.getPhoneNum(Integer.parseInt(id)));
+				info.setBody(reply);
+				sendInfo(info);
 				replyEditText.setText("");
-				Toast.makeText(this, R.string.have_send, 1000).show();
 			}
 
 		}
 	}
 	
-	private void insertInfo(String contact,String reply){
-		String ADDRESS="address";
-		String DATE="date";
-		String READ="read";
-		String STATUS="status";
-		String TYPE="type";
-		String BODY="body";
-		
-		ContentValues value=new ContentValues();
-		value.put(ADDRESS, contact);
-		value.put(DATE, String.valueOf(System.currentTimeMillis()));
-		value.put(READ, "1");
-		value.put(STATUS, "-1");
-		value.put(TYPE,"2");
-		value.put(BODY, reply);
-		
-		getContentResolver().insert(Uri.parse("content://sms"), value);
+	private SMSInfo getDraft(){
+		SMSInfo draft=null;
+		for(SMSInfo info:brain.getInfos()){
+			if(info.getType()==Constants.DRAFT){
+				draft=info;
+				break;
+			}
+		}
+		if(draft!=null){
+			brain.getInfos().remove(draft);
+		}
+		return draft;
 	}
-
 }

@@ -57,7 +57,8 @@ public class InfoUtil {
 						.getColumnIndex("snippet")));
 				conversation.setDate(cursor.getLong(cursor
 						.getColumnIndex("date")));
-				conversation.setDate_str(TimeUtil.longToStr(conversation.getDate()));
+				conversation.setDate_str(TimeUtil.longToStr(conversation
+						.getDate()));
 				conversation.setSnippet_cs(cursor.getLong(cursor
 						.getColumnIndex("snippet_cs")));
 				conversation.setCount(cursor.getLong(cursor
@@ -89,18 +90,22 @@ public class InfoUtil {
 
 	public static String getNameByPhoneNum(String phoneNum) {
 		String name = "";
-		Uri nameUri = Uri.withAppendedPath(
-				ContactsContract.PhoneLookup.CONTENT_FILTER_URI, phoneNum);
-		Cursor cursor = mContext.getContentResolver().query(nameUri,
-				new String[] { PhoneLookup.DISPLAY_NAME }, null, null, null);
-		if (cursor.moveToFirst()) {
-			int nameId = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME);
-			name = cursor.getString(nameId);
-		} else {
-			name = phoneNum;
-		}
-		if (cursor != null) {
-			cursor.close();
+		Log.i(TAG, "getNameByPhoneNum:" + phoneNum);
+		if (!phoneNum.trim().equals("")) {
+			Uri nameUri = Uri.withAppendedPath(
+					ContactsContract.PhoneLookup.CONTENT_FILTER_URI, phoneNum);
+			Cursor cursor = mContext.getContentResolver()
+					.query(nameUri, new String[] { PhoneLookup.DISPLAY_NAME },
+							null, null, null);
+			if (cursor.moveToFirst()) {
+				int nameId = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME);
+				name = cursor.getString(nameId);
+			} else {
+				name = phoneNum;
+			}
+			if (cursor != null) {
+				cursor.close();
+			}
 		}
 		return name;
 	}
@@ -122,9 +127,8 @@ public class InfoUtil {
 		String smsUri = "content://sms/";
 		String[] projection = { "_id", "address", "person", "date", "read",
 				"type", "body", "service_center", "locked" };
-		Cursor cursor = mContext.getContentResolver().query(
-				Uri.parse(smsUri), projection, "thread_id=" + thread_id,
-				null, "date desc");
+		Cursor cursor = mContext.getContentResolver().query(Uri.parse(smsUri),
+				projection, "thread_id=" + thread_id, null, "date desc");
 		while (cursor.moveToNext()) {
 			SMSInfo info = new SMSInfo();
 			info.setId(cursor.getLong(0));
@@ -181,56 +185,58 @@ public class InfoUtil {
 		Toast.makeText(context, R.string.save_draft, 1000).show();
 	}
 
-	public static void insertDraft(SMSInfo info, Context context) {
-		Log.i(TAG, "insert");
+	/**
+	 * 
+	 * @param context
+	 * @param info
+	 *            :the info to insert whether draft or info or failed
+	 */
+	public static void insertInfo(Context context, SMSInfo info) {
 		String ADDRESS = "address";
 		String DATE = "date";
+		String READ = "read";
+		String STATUS = "status";
 		String TYPE = "type";
 		String BODY = "body";
-		long time;
 
 		ContentValues value = new ContentValues();
 		value.put(ADDRESS, info.getAddress());
-		time = System.currentTimeMillis();
 		value.put(DATE, String.valueOf(System.currentTimeMillis()));
-		value.put(TYPE, "2");
+		value.put(READ, "1");
+		value.put(STATUS, "-1");
+		value.put(TYPE, info.getType());
 		value.put(BODY, info.getBody());
-
 		context.getContentResolver().insert(Uri.parse("content://sms"), value);
-		value.put(TYPE, "3");
-		context.getContentResolver().update(Uri.parse("content://sms"), value,
-				"date=" + time, null);
-		Toast.makeText(context, R.string.save_draft, 1000).show();
 	}
-	
+
 	/**
 	 * 
 	 * @param phone
 	 * @return display name str
 	 */
-	
-	public static String convertIdSToName(String phone){
-		String name="";
-		String[] ids=phone.split(" ");
-		for(int i=0;i<ids.length;i++){
-			name+=InfoUtil.getNameById((Integer.parseInt(ids[i])));
-			if(i!=ids.length-1){
-				name+=",";
+
+	public static String convertIdSToName(String phone) {
+		String name = "";
+		String[] ids = phone.split(" ");
+		for (int i = 0; i < ids.length; i++) {
+			name += InfoUtil.getNameById((Integer.parseInt(ids[i])));
+			if (i != ids.length - 1) {
+				name += ",";
 			}
 		}
 		return name;
 	}
-	
+
 	public static List<Contact> getContacts() {
 		List<Contact> contacts = new ArrayList<Contact>();
 		String[] PHONE_PROJECTION = new String[] { Phone.DISPLAY_NAME,
-				Phone.NUMBER};
+				Phone.NUMBER };
 		String sortOrder = " sort_key_alt asc";
-		Cursor phoneCursor =  mContext.getContentResolver().query(Phone.CONTENT_URI,
-				PHONE_PROJECTION, null, null, sortOrder);
+		Cursor phoneCursor = mContext.getContentResolver().query(
+				Phone.CONTENT_URI, PHONE_PROJECTION, null, null, sortOrder);
 		if (phoneCursor != null) {
 			while (phoneCursor.moveToNext()) {
-				Contact contact=new Contact();
+				Contact contact = new Contact();
 				contact.setName(phoneCursor.getString(0));
 				contact.setPhoneNum(phoneCursor.getString(1));
 				contact.setPinYin(PinYin.getPinYin(contact.getName()));

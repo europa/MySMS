@@ -1,19 +1,16 @@
 package com.example.smstb.bean;
 
 public class Conversation {
-	
-
-
-
-	long id;//the key of threads table
-	long date;//time
-	String date_str;//date str
-	long count;//the message's amount
-	String recipient_ids;//the receivers' ids
+	long id;// the key of threads table
+	long date;// time
+	String date_str;// date str
+	long count;// the message's amount
+	String recipient_ids;// the receivers' ids
 	String names;// the people's names
-	String snippet;//the latest message's content
-	long snippet_cs;//the snippet's code style;mms:UTF-8 is 106，sms:0
-	long read;//0:unread;1:read看
+	String snippet;// the latest message's content
+	long snippet_cs;// the snippet's code style;mms:UTF-8 is 106，sms:0
+	long read;// 0:unread;1:read看
+	long error;//
 
 	public long getId() {
 		return id;
@@ -38,6 +35,7 @@ public class Conversation {
 	public void setDate_str(String date_str) {
 		this.date_str = date_str;
 	}
+
 	public long getCount() {
 		return count;
 	}
@@ -53,6 +51,7 @@ public class Conversation {
 	public void setRecipient_ids(String recipient_ids) {
 		this.recipient_ids = recipient_ids;
 	}
+
 	public String getNames() {
 		return names;
 	}
@@ -60,6 +59,7 @@ public class Conversation {
 	public void setNames(String names) {
 		this.names = names;
 	}
+
 	public String getSnippet() {
 		return snippet;
 	}
@@ -84,4 +84,11 @@ public class Conversation {
 		this.read = read;
 	}
 
+	public long getError() {
+		return error;
+	}
+
+	public void setError(long error) {
+		this.error = error;
+	}
 }

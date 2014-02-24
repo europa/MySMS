@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.telephony.gsm.SmsManager;
 import android.text.Editable;
@@ -14,27 +13,20 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.smstb.R;
 import com.example.smstb.bean.Contact;
-import com.example.smstb.bean.SMSInfo;
 import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
-public class NewActivity extends BaseActivity {
+public class NewActivity extends SendBaseActivity {
 	private EditText contactEditText;
 	private EditText replyEditText;
 	private Button sendBtn, contactBtn;
-	private String contact;
 	private String reply;
-	private SMSInfo info = new SMSInfo();
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,20 +36,6 @@ public class NewActivity extends BaseActivity {
 		if (brain.getContacts().size() == 0) {
 			brain.setContacts(InfoUtil.getContacts());
 		}
-//		autoCompleteTextView.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-//					long arg3) {
-//				String auto=autoCompleteTextView.getText().toString().trim();
-//				if(!auto.endsWith(",")){
-//					auto+=",";
-//				}
-//				auto+=brain.getContacts().get(arg2).getName()+",";
-//				autoCompleteTextView.setText(auto);
-//			}
-//			
-//		});
 		contactEditText.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -89,7 +67,6 @@ public class NewActivity extends BaseActivity {
 
 	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-		Log.i(TAG, "arg0:" + arg0 + ",arg1:" + arg1);
 		switch (arg1) {
 		case RESULT_OK:
 			String name = "";
@@ -109,13 +86,13 @@ public class NewActivity extends BaseActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if (contactEditText.getText().equals("")
-				|| replyEditText.getText().toString().trim().equals("")) {
+		if (replyEditText.getText().toString().trim().equals("")) {
 			return;
 		}
-		info.setBody(contactEditText.getText().toString());
-		info.setAddress(replyEditText.getText().toString().trim());
-		InfoUtil.insertDraft(info, this);
+		info.setBody(replyEditText.getText().toString().trim());
+		info.setAddress(contactEditText.getText().toString().trim());
+		info.setType(Constants.DRAFT);
+		InfoUtil.insertInfo(this,info);
 	}
 
 	class BtnOnClickListener implements OnClickListener {
@@ -124,7 +101,7 @@ public class NewActivity extends BaseActivity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.send:
-				sendInfo();
+				handleInfo();
 				break;
 			case R.id.contactBtn:
 				toContact();
@@ -135,30 +112,23 @@ public class NewActivity extends BaseActivity {
 		}
 	}
 
-	private void sendInfo() {
+	private void handleInfo() {
 		reply = replyEditText.getText().toString();
-		contact = contactEditText.getText().toString();
-		if (contact.trim().equals("")) {
+		String contactStr = contactEditText.getText().toString();
+		if (contactStr.trim().equals("")) {
 			Toast.makeText(this, R.string.phonenum_not_null, 1000).show();
 		} else if (reply.equals("")) {
 			Toast.makeText(this, R.string.not_null, 1000).show();
 		} else {
-			String[] phoneNums = contact.split(",");
-			for (int i = 0; i < phoneNums.length; i++) {
-				contact = phoneNums[i];
-				insertInfo(contact, reply);
-				Intent itSend = new Intent(Constants.SMS_SEND_ACTION);
-
-				itSend.putExtra(Constants.NAME, contact);
-				Intent itDeliver = new Intent(Constants.SMS_DELIVERED_ACTION);
-				PendingIntent sendPi = PendingIntent.getActivity(this, 0,
-						itSend, 0);
-				PendingIntent deliverPi = PendingIntent.getActivity(this, 0,
-						itDeliver, 0);
-				SmsManager manager = SmsManager.getDefault();
-				manager.sendTextMessage(contact, null, reply, sendPi, deliverPi);
+			String[] names = contactStr.split(",");
+			for (int i = 0; i < names.length; i++) {
+				if(names[i].trim().equals("")){
+					continue;
+				}
+				info.setAddress(brain.getContactByName(names[i]));
+				info.setBody(reply);
+				sendInfo(info);
 				replyEditText.setText("");
-				Toast.makeText(this, R.string.have_send, 1000).show();
 			}
 
 		}
@@ -168,25 +138,6 @@ public class NewActivity extends BaseActivity {
 		Intent intent = new Intent();
 		intent.setClass(this, ContactActivity.class);
 		startActivityForResult(intent, 0);
-	}
-
-	private void insertInfo(String contact, String reply) {
-		String ADDRESS = "address";
-		String DATE = "date";
-		String READ = "read";
-		String STATUS = "status";
-		String TYPE = "type";
-		String BODY = "body";
-
-		ContentValues value = new ContentValues();
-		value.put(ADDRESS, contact);
-		value.put(DATE, String.valueOf(System.currentTimeMillis()));
-		value.put(READ, "1");
-		value.put(STATUS, "-1");
-		value.put(TYPE, "2");
-		value.put(BODY, reply);
-
-		getContentResolver().insert(Uri.parse("content://sms"), value);
 	}
 
 	private List<String> getAutoStrList() {
@@ -200,4 +151,6 @@ public class NewActivity extends BaseActivity {
 		}
 		return autoStrList;
 	}
+	
+	
 }
