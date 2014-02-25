@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -21,72 +24,10 @@ import com.example.smstb.ui.adapter.PinyinAdapter;
 import com.example.smstb.util.InfoUtil;
 
 public class ContactActivity extends BaseActivity {
-
 	private ListView pinyinListView;
 	private ListView contactListView;
 	private ContactAdapter contactAdapter;
 	private PinyinAdapter pinyinAdapter;
-	private List<List<String>> contacts = new ArrayList<List<String>>();
-	private List<Contact> allContacts = new ArrayList<Contact>();
-	private List<Boolean> selectedContact = new ArrayList<Boolean>();
-	private TextView sureTextView;
-
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_contact);
-
-		findView();
-		if (brain.getContacts().size() == 0) {
-			brain.setContacts(InfoUtil.getContacts());
-		}
-		contactAdapter = new ContactAdapter(brain.getContacts(), this);
-		pinyinAdapter = new PinyinAdapter(brain.getPinyinList(), this);
-		contactListView.setItemsCanFocus(true);
-		contactListView.setAdapter(contactAdapter);
-		pinyinListView.setAdapter(pinyinAdapter);
-
-		sureTextView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				getSelectedContacts();
-				Intent intent = new Intent();
-				setResult(RESULT_OK);
-				ContactActivity.this.finish();
-			}
-		});
-		contactListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				contactListView.setItemChecked(position,
-						contactListView.isItemChecked(position));
-			}
-
-		});
-		pinyinListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				String pinyin = pinyinAdapter.getItem(arg2);
-				for (Contact contact : contactAdapter.list) {
-					if (contact.getPinYin().startsWith(pinyin)) {
-						contactListView.setSelectionFromTop(
-								contactAdapter.list.indexOf(contact), 10);
-						break;
-					}
-				}
-			}
-
-		});
-	}
-
-	private void findView() {
-		contactListView = (ListView) findViewById(R.id.contact);
-		pinyinListView = (ListView) findViewById(R.id.pinyinListView);
-		sureTextView = (TextView) findViewById(R.id.sure);
-	}
 
 	@Override
 	protected void onResume() {
@@ -128,5 +69,107 @@ public class ContactActivity extends BaseActivity {
 		@Override
 		public void onClick(View v) {
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_contact, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.sure:
+			getSelectedContacts();
+			new Intent();
+			setResult(RESULT_OK);
+			ContactActivity.this.finish();if (brain.getContacts().size() == 0) {
+				brain.setContacts(InfoUtil.getContacts());
+			}
+			contactAdapter = new ContactAdapter(brain.getContacts(), this);
+			pinyinAdapter = new PinyinAdapter(brain.getPinyinList(), this);
+			contactListView.setItemsCanFocus(true);
+			contactListView.setAdapter(contactAdapter);
+			pinyinListView.setAdapter(pinyinAdapter);
+
+			contactListView.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					contactListView.setItemChecked(position,
+							contactListView.isItemChecked(position));
+				}
+
+			});
+			pinyinListView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+						long arg3) {
+					String pinyin = pinyinAdapter.getItem(arg2);
+					for (Contact contact : contactAdapter.list) {
+						if (contact.getPinYin().startsWith(pinyin)) {
+							contactListView.setSelectionFromTop(
+									contactAdapter.list.indexOf(contact), 10);
+							break;
+						}
+					}
+				}
+
+			});
+			break;
+
+		default:
+			break;
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}
+
+	@Override
+	public int getLayoutId() {
+		return R.layout.layout_contact;
+	}
+
+	@Override
+	public void setView() {
+		contactListView = (ListView) findViewById(R.id.contact);
+		pinyinListView = (ListView) findViewById(R.id.pinyinListView);
+		if (brain.getContacts().size() == 0) {
+			brain.setContacts(InfoUtil.getContacts());
+		}
+		contactAdapter = new ContactAdapter(brain.getContacts(), this);
+		pinyinAdapter = new PinyinAdapter(brain.getPinyinList(), this);
+		contactListView.setItemsCanFocus(true);
+		contactListView.setAdapter(contactAdapter);
+		pinyinListView.setAdapter(pinyinAdapter);
+
+		contactListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				contactListView.setItemChecked(position,
+						contactListView.isItemChecked(position));
+			}
+
+		});
+		pinyinListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				String pinyin = pinyinAdapter.getItem(arg2);
+				for (Contact contact : contactAdapter.list) {
+					if (contact.getPinYin().startsWith(pinyin)) {
+						contactListView.setSelectionFromTop(
+								contactAdapter.list.indexOf(contact), 10);
+						break;
+					}
+				}
+			}
+
+		});
 	}
 }

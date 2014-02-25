@@ -13,7 +13,7 @@ import com.example.smstb.bean.SMSInfo;
 import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
-public class SendBaseActivity extends BaseActivity {
+public abstract class SendBaseActivity extends InfoBaseActivity {
 	public SMSInfo info = new SMSInfo();
 	public SMSInfo draft =null;
 	BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -60,7 +60,7 @@ public class SendBaseActivity extends BaseActivity {
 		registerReceiver(receiver, filter);
 		manager.sendTextMessage(info.getAddress(), null, info.getBody(), sendPi, deliverPi);
 	}
-	private BaseActivity getMe() {
-		return (BaseActivity) this;
+	private InfoBaseActivity getMe() {
+		return (InfoBaseActivity) this;
 	}
 }

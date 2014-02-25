@@ -3,14 +3,9 @@ package com.example.smstb.ui.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.telephony.gsm.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,47 +18,11 @@ import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
 public class NewActivity extends SendBaseActivity {
+	
 	private EditText contactEditText;
 	private EditText replyEditText;
 	private Button sendBtn, contactBtn;
 	private String reply;
-
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.new_info);
-
-		findView();
-		if (brain.getContacts().size() == 0) {
-			brain.setContacts(InfoUtil.getContacts());
-		}
-		contactEditText.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				String str=s.toString();
-				//count==0,delete,or add
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-		sendBtn.setOnClickListener(new BtnOnClickListener());
-		contactBtn.setOnClickListener(new BtnOnClickListener());
-	}
-
-	private void findView() {
-		contactEditText = (EditText) findViewById(R.id.contact);
-		replyEditText = (EditText) findViewById(R.id.reply);
-		sendBtn = (Button) findViewById(R.id.send);
-		contactBtn = (Button) findViewById(R.id.contactBtn);
-	}
 
 	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
@@ -151,6 +110,49 @@ public class NewActivity extends SendBaseActivity {
 		}
 		return autoStrList;
 	}
+
+	@Override
+	public int getLayoutId() {
+		return R.layout.new_info;
+	}
+
+	@Override
+	public void setView() {
+		contactEditText = (EditText) findViewById(R.id.contact);
+		replyEditText = (EditText) findViewById(R.id.reply);
+		sendBtn = (Button) findViewById(R.id.send);
+		contactBtn = (Button) findViewById(R.id.contactBtn);
+		actionBar.setTitle("新建短信");
+		if (brain.getContacts().size() == 0) {
+			brain.setContacts(InfoUtil.getContacts());
+		}
+		contactEditText.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String str=s.toString();
+				//count==0,delete,or add
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+		sendBtn.setOnClickListener(new BtnOnClickListener());
+		contactBtn.setOnClickListener(new BtnOnClickListener());
+	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		menu.findItem(R.id.write).setIcon(R.drawable.contact);
+	}
+
 	
 }

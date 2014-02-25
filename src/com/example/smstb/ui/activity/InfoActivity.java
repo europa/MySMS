@@ -36,66 +36,33 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InfoActivity extends BaseActivity implements DismissProgessInterface{
-	private TextView personText,infoText,infoPerson,sendInfo;
+public class InfoActivity extends InfoBaseActivity implements
+		DismissProgessInterface {
+	private TextView personText, infoText, infoPerson, sendInfo;
 	private SMSInfo mInfo;
 	private Button sendBtn;
 	private ProgressBar sendProgressBar;
 	private EditText replyEdit;
 	private LinearLayout progressLayout;
 	String phoneNum;
-	String name,reply;
-	private List<SMSInfo> mInfos=new ArrayList<SMSInfo>();
+	String name, reply;
+	private List<SMSInfo> mInfos = new ArrayList<SMSInfo>();
 	private SMSReceiver receiver;
-	
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_info);
-		mInfo=(SMSInfo) getIntent().getSerializableExtra(Constants.INFO);
-		
-		personText=(TextView) findViewById(R.id.head_center);
-		infoText=(TextView) findViewById(R.id.info);
-		infoPerson=(TextView) findViewById(R.id.infoPerson);
-		sendBtn=(Button) findViewById(R.id.send);
-		replyEdit=(EditText) findViewById(R.id.reply);
-		sendInfo=(TextView) findViewById(R.id.sendInfo);
-		sendProgressBar=(ProgressBar) findViewById(R.id.sendProgress);
-		progressLayout=(LinearLayout) findViewById(R.id.progressLayout);
-		
-		phoneNum=mInfo.getAddress();
-		name=phoneNum;
-		if(phoneNum.equals(name)){
-			personText.setText(phoneNum);
-		}else{
-			personText.setText(name+" "+phoneNum);
-		}
-		if(mInfo.getType()==1){
-			infoPerson.setText(R.string.me);
-		}else if(mInfo.getType()==2){
-			infoText.setText("");
-		}else{
-			infoPerson.setText(name+"：");
-		}
-			infoText.setText(mInfo.getBody());
-		
-		sendBtn.setOnClickListener(new SendOnClickListener());
-	}
-	
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		receiver=new SMSReceiver(this);
+		receiver = new SMSReceiver(this);
 		registerReceiver(receiver, new IntentFilter(Constants.SMS_SEND_ACTION));
 	}
 
-	protected void onPause(){
+	protected void onPause() {
 		super.onPause();
-		if(replyEdit.getText()!=null&&replyEdit.getText().equals("")){
+		if (replyEdit.getText() != null && replyEdit.getText().equals("")) {
 			mInfo.setBody(replyEdit.getText().toString());
-			InfoUtil.saveDraft(mInfo,this);
-		}else{
-			if(mInfo.getType()==2){
+			InfoUtil.saveDraft(mInfo, this);
+		} else {
+			if (mInfo.getType() == 2) {
 				InfoUtil.deleteById(mInfo.getId());
 				Toast.makeText(this, R.string.delete_draft, 1000).show();
 			}
@@ -103,59 +70,99 @@ public class InfoActivity extends BaseActivity implements DismissProgessInterfac
 		unregisterReceiver(receiver);
 	}
 
-	class SendOnClickListener implements OnClickListener{
+	class SendOnClickListener implements OnClickListener {
 
-	@Override
+		@Override
 		public void onClick(View v) {
 			sendInfo();
 		}
 	}
-	
-	private void sendInfo(){
-		if((replyEdit.getText().toString()).equals("")){
-			Log.i(TAG,"null");
-			Toast.makeText(this, R.string.not_null,1000).show();
-		}else{
-			Log.i(TAG,"send");
-			reply=replyEdit.getText().toString();
-			
+
+	private void sendInfo() {
+		if ((replyEdit.getText().toString()).equals("")) {
+			Log.i(TAG, "null");
+			Toast.makeText(this, R.string.not_null, 1000).show();
+		} else {
+			Log.i(TAG, "send");
+			reply = replyEdit.getText().toString();
+
 			sendProgressBar.setVisibility(View.VISIBLE);
-			insertInfo(phoneNum,reply);
-			
-			Intent itSend=new Intent(Constants.SMS_SEND_ACTION);
+			insertInfo(phoneNum, reply);
+
+			Intent itSend = new Intent(Constants.SMS_SEND_ACTION);
 			sendBroadcast(itSend);
-			Intent itDeliver=new Intent(Constants.SMS_DELIVERED_ACTION);
-			PendingIntent sendPi=PendingIntent.getActivity(this,0 ,itSend, 0);
-			PendingIntent deliverPi=PendingIntent.getActivity(this,0 ,itDeliver, 0);
-			SmsManager manager=SmsManager.getDefault();
+			Intent itDeliver = new Intent(Constants.SMS_DELIVERED_ACTION);
+			PendingIntent sendPi = PendingIntent
+					.getActivity(this, 0, itSend, 0);
+			PendingIntent deliverPi = PendingIntent.getActivity(this, 0,
+					itDeliver, 0);
+			SmsManager manager = SmsManager.getDefault();
 			manager.sendTextMessage(phoneNum, null, reply, sendPi, deliverPi);
 			replyEdit.setText("");
-			Toast.makeText(this, R.string.have_send,1000).show();
+			Toast.makeText(this, R.string.have_send, 1000).show();
 		}
 	}
-	private void insertInfo(String phoneNum,String reply){
-		String ADDRESS="address";
-		String DATE="date";
-		String READ="read";
-		String STATUS="status";
-		String TYPE="type";
-		String BODY="body";
-		
-		ContentValues value=new ContentValues();
+
+	private void insertInfo(String phoneNum, String reply) {
+		String ADDRESS = "address";
+		String DATE = "date";
+		String READ = "read";
+		String STATUS = "status";
+		String TYPE = "type";
+		String BODY = "body";
+
+		ContentValues value = new ContentValues();
 		value.put(ADDRESS, phoneNum);
 		value.put(DATE, String.valueOf(System.currentTimeMillis()));
 		value.put(READ, "1");
 		value.put(STATUS, "-1");
-		value.put(TYPE,"2");
+		value.put(TYPE, "2");
 		value.put(BODY, reply);
-		
+
 		getContentResolver().insert(Uri.parse("content://sms"), value);
 	}
-	
-	public void dismissProgress(){
-		Log.i(TAG,"diss");
+
+	public void dismissProgress() {
+		Log.i(TAG, "diss");
 		sendProgressBar.setVisibility(View.GONE);
 		sendInfo.setText(reply);
 		progressLayout.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public int getLayoutId() {
+		return R.layout.layout_info;
+	}
+
+	@Override
+	public void setView() {
+		mInfo = (SMSInfo) getIntent().getSerializableExtra(Constants.INFO);
+
+		personText = (TextView) findViewById(R.id.head_center);
+		infoText = (TextView) findViewById(R.id.info);
+		infoPerson = (TextView) findViewById(R.id.infoPerson);
+		sendBtn = (Button) findViewById(R.id.send);
+		replyEdit = (EditText) findViewById(R.id.reply);
+		sendInfo = (TextView) findViewById(R.id.sendInfo);
+		sendProgressBar = (ProgressBar) findViewById(R.id.sendProgress);
+		progressLayout = (LinearLayout) findViewById(R.id.progressLayout);
+
+		phoneNum = mInfo.getAddress();
+		name = phoneNum;
+		if (phoneNum.equals(name)) {
+			personText.setText(phoneNum);
+		} else {
+			personText.setText(name + " " + phoneNum);
+		}
+		if (mInfo.getType() == 1) {
+			infoPerson.setText(R.string.me);
+		} else if (mInfo.getType() == 2) {
+			infoText.setText("");
+		} else {
+			infoPerson.setText(name + "：");
+		}
+		infoText.setText(mInfo.getBody());
+
+		sendBtn.setOnClickListener(new SendOnClickListener());
 	}
 }

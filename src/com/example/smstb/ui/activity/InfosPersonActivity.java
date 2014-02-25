@@ -1,11 +1,6 @@
 package com.example.smstb.ui.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -24,31 +19,10 @@ import com.example.smstb.util.InfoUtil;
 public class InfosPersonActivity extends SendBaseActivity {
 
 
-	private TextView personText;
 	private ListView infoList;
 	SMSInfoAdapter smsInfoAdapter;
 	private ImageButton contactImgBtn, sendImgBtn;
 	EditText replyEditText;
-
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_infos);
-
-		personText = (TextView) findViewById(R.id.head_center);
-		infoList = (ListView) findViewById(R.id.infos);
-		contactImgBtn = (ImageButton) findViewById(R.id.contactImgBtn);
-		sendImgBtn = (ImageButton) findViewById(R.id.sendImgBtn);
-		replyEditText = (EditText) findViewById(R.id.replyEdit);
-
-		brain.setInfos(InfoUtil.queryByThreadId(brain.getCurrentThreadId()));
-		draft=getDraft();
-		if(draft!=null){
-			replyEditText.setText(draft.getBody());
-		}
-		smsInfoAdapter = new SMSInfoAdapter(brain.getInfos(), this);
-		infoList.setAdapter(smsInfoAdapter);
-		personText.setText(brain.getCurrentName());
-	}
 
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -124,4 +98,28 @@ public class InfosPersonActivity extends SendBaseActivity {
 		}
 		return draft;
 	}
+
+	@Override
+	public int getLayoutId() {
+		return R.layout.layout_infos;
+	}
+
+	@Override
+	public void setView() {
+		infoList = (ListView) findViewById(R.id.infos);
+		contactImgBtn = (ImageButton) findViewById(R.id.contactImgBtn);
+		sendImgBtn = (ImageButton) findViewById(R.id.sendImgBtn);
+		replyEditText = (EditText) findViewById(R.id.replyEdit);
+
+		brain.setInfos(InfoUtil.queryByThreadId(brain.getCurrentThreadId()));
+		draft=getDraft();
+		if(draft!=null){
+			replyEditText.setText(draft.getBody());
+		}
+		smsInfoAdapter = new SMSInfoAdapter(brain.getInfos(), this);
+		infoList.setAdapter(smsInfoAdapter);
+		actionBar.setTitle(brain.getCurrentName());
+	}
+	
+	
 }

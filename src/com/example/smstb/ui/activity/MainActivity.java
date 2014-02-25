@@ -2,7 +2,6 @@ package com.example.smstb.ui.activity;
 
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -13,29 +12,15 @@ import com.example.smstb.ui.adapter.ContentAdapter;
 import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
-public class MainActivity extends BaseActivity{
+public class MainActivity extends InfoBaseActivity{
 	private ListView infosListView;
 	private ContentAdapter infosAdapter;
-
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.layout_main);
-		findView();
-		InfoUtil infoUtil=InfoUtil.newInstance(this);
-		infosAdapter=new ContentAdapter(InfoUtil.getItemsByPerson(),this);
-		infosListView.setAdapter(infosAdapter);
-		infosListView.setOnItemClickListener(new ItemClickListener());
-	}
 
 	@Override
 	protected void onResume() {
 		infosAdapter.list=InfoUtil.getItemsByPerson();
 		infosAdapter.notifyDataSetChanged();
 		super.onResume();
-	}
-
-	private void findView() {
-		infosListView=(ListView) findViewById(R.id.infoList);
 	}
 
 	class ItemClickListener implements OnItemClickListener {
@@ -49,5 +34,18 @@ public class MainActivity extends BaseActivity{
 			intent.putExtra(Constants.THREAD_ID,infosAdapter.getItem(position).getId());
 			startActivity(intent);
 		}
+	}
+
+	@Override
+	public int getLayoutId() {
+		return R.layout.layout_main;
+	}
+
+	@Override
+	public void setView() {
+		infosListView=(ListView) findViewById(R.id.infoList);
+		infosAdapter=new ContentAdapter(InfoUtil.getItemsByPerson(),this);
+		infosListView.setAdapter(infosAdapter);
+		infosListView.setOnItemClickListener(new ItemClickListener());
 	}
 }
