@@ -21,14 +21,10 @@ public class InfosPersonActivity extends SendBaseActivity {
 
 	private ListView infoList;
 	SMSInfoAdapter smsInfoAdapter;
-	private ImageButton contactImgBtn, sendImgBtn;
 	EditText replyEditText;
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.contactImgBtn:
-
-			break;
 		case R.id.sendImgBtn:
 			handleInfo();
 			break;
@@ -107,8 +103,6 @@ public class InfosPersonActivity extends SendBaseActivity {
 	@Override
 	public void setView() {
 		infoList = (ListView) findViewById(R.id.infos);
-		contactImgBtn = (ImageButton) findViewById(R.id.contactImgBtn);
-		sendImgBtn = (ImageButton) findViewById(R.id.sendImgBtn);
 		replyEditText = (EditText) findViewById(R.id.replyEdit);
 
 		brain.setInfos(InfoUtil.queryByThreadId(brain.getCurrentThreadId()));

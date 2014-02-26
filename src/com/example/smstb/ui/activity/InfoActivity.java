@@ -38,6 +38,8 @@ import android.widget.Toast;
 
 public class InfoActivity extends InfoBaseActivity implements
 		DismissProgessInterface {
+
+
 	private TextView personText, infoText, infoPerson, sendInfo;
 	private SMSInfo mInfo;
 	private Button sendBtn;

@@ -9,34 +9,37 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:divider="@android:color/transparent"
-        android:listSelector="@android:color/transparent"
-        android:splitMotionEvents="true" >
+        android:dividerHeight="20dp"
+        android:listSelector="@android:color/transparent" >
     </ListView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1.5dp"
+        android:background="@android:drawable/divider_horizontal_dim_dark" >
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/replyLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0" >
-
-        <ImageButton
-            android:id="@+id/contactImgBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:background="@drawable/contact"
-            android:onClick="onClick" />
+        android:layout_weight="0"
+        android:background="@color/bottomBackColor"
+        android:minHeight="50dp" >
 
         <EditText
             android:id="@+id/replyEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1" />
 
         <ImageButton
             android:id="@+id/sendImgBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
             android:background="@drawable/send"
             android:onClick="onClick" />
     </LinearLayout>

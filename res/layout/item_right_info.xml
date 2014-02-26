@@ -12,6 +12,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/chat_to" />
+        android:autoLink="all"
+        android:background="@drawable/chat_to"
+        android:textColorLink="@color/linkcolor" />
 
 </RelativeLayout>

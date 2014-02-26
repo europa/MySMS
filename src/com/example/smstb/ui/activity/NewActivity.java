@@ -6,6 +6,9 @@ import java.util.List;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,10 +21,9 @@ import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
 public class NewActivity extends SendBaseActivity {
-	
 	private EditText contactEditText;
 	private EditText replyEditText;
-	private Button sendBtn, contactBtn;
+	private Button sendBtn;
 	private String reply;
 
 	@Override
@@ -61,9 +63,6 @@ public class NewActivity extends SendBaseActivity {
 			switch (v.getId()) {
 			case R.id.send:
 				handleInfo();
-				break;
-			case R.id.contactBtn:
-				toContact();
 				break;
 			default:
 				break;
@@ -121,7 +120,6 @@ public class NewActivity extends SendBaseActivity {
 		contactEditText = (EditText) findViewById(R.id.contact);
 		replyEditText = (EditText) findViewById(R.id.reply);
 		sendBtn = (Button) findViewById(R.id.send);
-		contactBtn = (Button) findViewById(R.id.contactBtn);
 		actionBar.setTitle("新建短信");
 		if (brain.getContacts().size() == 0) {
 			brain.setContacts(InfoUtil.getContacts());
@@ -145,14 +143,19 @@ public class NewActivity extends SendBaseActivity {
 			}
 		});
 		sendBtn.setOnClickListener(new BtnOnClickListener());
-		contactBtn.setOnClickListener(new BtnOnClickListener());
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		menu.findItem(R.id.write).setIcon(R.drawable.contact);
 	}
 
-	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.findItem(R.id.write).setIcon(R.drawable.contact);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		toContact();
+		return true;
+	}
+
 }

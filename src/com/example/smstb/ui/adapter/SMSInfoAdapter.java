@@ -30,14 +30,19 @@ public class SMSInfoAdapter extends ToolAdapter<SMSInfo> implements
 
 	@Override
 	public int getItemViewType(int position) {
-		return (int) getItem(position).getType();
+		long viewType=getItem(position).getType();
+		if(viewType==2){
+			return 1;
+		}else{
+			return 0;
+		}
 	}
 
 	@Override
 	public int getViewTypeCount() {
-//		return list.size();
-		int size=list.size();
-		return size<1?1:size;
+//		int size=list.size();
+//		return size<1?1:size;
+		return 2;
 	}
 
 	@Override
@@ -59,7 +64,7 @@ public class SMSInfoAdapter extends ToolAdapter<SMSInfo> implements
 		} else {
 			viewHolder = (ViewHolder) view.getTag();
 		}
-		viewHolder.contentTextView.setText(info.getBody()+type);
+		viewHolder.contentTextView.setText(info.getBody());
 		return view;
 	}
 
