@@ -30,8 +30,6 @@ public class MainActivity extends InfoBaseActivity{
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, InfosPersonActivity.class);
 			brain.setCurrentConversation(infosAdapter.getItem(position));
-			intent.putExtra(Constants.NAME,infosAdapter.convertToName(infosAdapter.getItem(position).getRecipient_ids()));
-			intent.putExtra(Constants.THREAD_ID,infosAdapter.getItem(position).getId());
 			startActivity(intent);
 		}
 	}

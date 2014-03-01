@@ -12,7 +12,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 import com.example.smstb.bean.SMSInfo;
-import com.example.smstb.ui.activity.InfoActivity;
+import com.example.smstb.ui.activity.InfosPersonActivity;
 import com.example.smstb.util.Constants;
 
 public class SMSTestReceiver extends BroadcastReceiver{
@@ -37,7 +37,7 @@ public class SMSTestReceiver extends BroadcastReceiver{
 			}	
 			for(SmsMessage message:messages){
 				Log.i(TAG,TAG);
-				Intent sendIntent=new Intent(context,InfoActivity.class);
+				Intent sendIntent=new Intent(context,InfosPersonActivity.class);
 				SMSInfo info=new SMSInfo();
 				
 				String phoneNum=message.getDisplayOriginatingAddress();
@@ -59,12 +59,4 @@ public class SMSTestReceiver extends BroadcastReceiver{
 		}
 	
 	} 
-	
-//		Log.i(TAG,"send");
-//		Log.i(TAG,"bundle:"+bundle.getString(Constants.NAME));
-//		Intent sendIntent=new Intent();
-//		sendIntent.putExtra(Constants.NAME, bundle.getString(Constants.NAME));
-//		sendIntent.setClass(context,InfosPersonActivity.class);
-//		context.startActivity(sendIntent);
-
 }

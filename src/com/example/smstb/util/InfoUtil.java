@@ -1,18 +1,8 @@
 package com.example.smstb.util;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.example.smstb.R;
-import com.example.smstb.R.string;
-import com.example.smstb.bean.Contact;
-import com.example.smstb.bean.Conversation;
-import com.example.smstb.bean.ItemInfo;
-import com.example.smstb.bean.SMSInfo;
-
-import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -22,6 +12,11 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.smstb.R;
+import com.example.smstb.bean.Contact;
+import com.example.smstb.bean.Conversation;
+import com.example.smstb.bean.SMSInfo;
 
 public class InfoUtil {
 	private static final String TAG = "InfoUtil";
@@ -68,6 +63,7 @@ public class InfoUtil {
 				conversations.add(conversation);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		return conversations;
 	}
 

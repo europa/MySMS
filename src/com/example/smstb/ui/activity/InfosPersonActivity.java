@@ -1,13 +1,8 @@
 package com.example.smstb.ui.activity;
 
-import android.content.Intent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.smstb.R;
@@ -53,24 +48,12 @@ public class InfosPersonActivity extends SendBaseActivity {
 		}
 		super.onPause();
 	}
-	class InfoOnItemClickListener implements OnItemClickListener {
-
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			Intent intent = new Intent();
-			intent.setClass(InfosPersonActivity.this, InfoActivity.class);
-			intent.putExtra(Constants.INFO,
-					(SMSInfo) smsInfoAdapter.getItem(position));
-			startActivity(intent);
-		}
-	}
 
 	private void handleInfo() {
 		String reply = replyEditText.getText().toString();
 		if (reply.equals("")) {
 			Toast.makeText(this, R.string.not_null, 1000).show();
-		} else {
+		}else {
 			for (String id:brain.getCurrentConversation().getRecipient_ids().split(" ")) {
 				info.setAddress(InfoUtil.getPhoneNum(Integer.parseInt(id)));
 				info.setBody(reply);
