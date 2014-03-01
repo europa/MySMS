@@ -1,5 +1,13 @@
 package com.example.smstb.ui.activity;
 
+import java.net.URI;
+
+import android.R.anim;
+import android.content.Intent;
+import android.drm.DrmStore.Action;
+import android.net.Uri;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -12,8 +20,6 @@ import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
 public class InfosPersonActivity extends SendBaseActivity {
-
-
 	private ListView infoList;
 	SMSInfoAdapter smsInfoAdapter;
 	EditText replyEditText;
@@ -98,5 +104,33 @@ public class InfosPersonActivity extends SendBaseActivity {
 		actionBar.setTitle(brain.getCurrentName());
 	}
 	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_infos, menu);
+		return true;
+	}
+
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent=new Intent();
+		switch (item.getItemId()) {
+		case R.id.dial:
+			intent.setAction(Intent.ACTION_DIAL);
+			intent.setData(Uri.parse("tel:"+brain.getContactByName(brain.getCurrentName())));
+			startActivity(intent);
+			break;
+		case R.id.write:
+			intent.setClass(this,NewActivity.class);
+			startActivity(intent);
+			break;
+
+		default:
+			break;
+		}
+		return true;
+	}
+
 	
 }
