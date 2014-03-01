@@ -9,7 +9,6 @@ import android.widget.ListView;
 
 import com.example.smstb.R;
 import com.example.smstb.ui.adapter.ContentAdapter;
-import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
 public class MainActivity extends InfoBaseActivity{
@@ -28,8 +27,12 @@ public class MainActivity extends InfoBaseActivity{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Intent intent = new Intent();
-			intent.setClass(MainActivity.this, InfosPersonActivity.class);
-			brain.setCurrentConversation(infosAdapter.getItem(position));
+			if(infosAdapter.getItem(position).getCount()==0){
+				intent.setClass(MainActivity.this,NewActivity.class);
+			}else{
+				intent.setClass(MainActivity.this, InfosPersonActivity.class);
+				brain.setCurrentConversation(infosAdapter.getItem(position));
+			}
 			startActivity(intent);
 		}
 	}

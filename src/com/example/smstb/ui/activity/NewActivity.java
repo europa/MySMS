@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.smstb.R;
 import com.example.smstb.bean.Contact;
+import com.example.smstb.bean.Conversation;
 import com.example.smstb.util.Constants;
 import com.example.smstb.util.InfoUtil;
 
@@ -121,6 +122,10 @@ public class NewActivity extends SendBaseActivity {
 		replyEditText = (EditText) findViewById(R.id.reply);
 		sendBtn = (Button) findViewById(R.id.send);
 		actionBar.setTitle("新建短信");
+		Conversation conversation=brain.getGlobalConversation();
+		if(conversation!=null){
+			replyEditText.setText(conversation.getSnippet());
+		}
 		if (brain.getContacts().size() == 0) {
 			brain.setContacts(InfoUtil.getContacts());
 		}

@@ -8,6 +8,7 @@ import com.example.smstb.bean.Conversation;
 import com.example.smstb.bean.SMSInfo;
 
 public class Brain {
+
 	private static Brain brain = null;
 
 	private Brain() {
@@ -24,6 +25,7 @@ public class Brain {
 	private List<Contact> contacts=new ArrayList<Contact>();
 	private List<Contact> selectedContacts=new ArrayList<Contact>();
 	private List<SMSInfo> infos=new ArrayList<SMSInfo>();
+	private Conversation globalConversation;
 
 	public Conversation getCurrentConversation() {
 		return currentConversation;
@@ -100,6 +102,14 @@ public class Brain {
 
 	public void setInfos(List<SMSInfo> infos) {
 		this.infos = infos;
+	}
+	
+	public Conversation getGlobalConversation() {
+		return globalConversation;
+	}
+
+	public void setGlobalConversation(Conversation globalConversation) {
+		this.globalConversation = globalConversation;
 	}
 	
 }

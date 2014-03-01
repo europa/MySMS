@@ -1,10 +1,6 @@
 package com.example.smstb.ui.activity;
 
-import java.net.URI;
-
-import android.R.anim;
 import android.content.Intent;
-import android.drm.DrmStore.Action;
 import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;

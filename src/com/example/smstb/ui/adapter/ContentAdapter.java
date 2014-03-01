@@ -3,6 +3,7 @@ package com.example.smstb.ui.adapter;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,13 @@ public class ContentAdapter extends ToolAdapter<Conversation> implements ListInt
 		}
 		Conversation conversation=getItem(arg0);
 		holder.phoneNumberText.setText(InfoUtil.convertIdSToName(conversation.getRecipient_ids()));
-		holder.amountText.setText("("+conversation.getCount()+")");
+		if(conversation.getCount()==0){
+			holder.amountText.setText("草稿");
+			holder.amountText.setTextColor(Color.RED);
+		}else{
+			holder.amountText.setText("("+conversation.getCount()+")");
+			holder.amountText.setTextColor(Color.BLACK);
+		}
 		holder.contentText.setText(conversation.getSnippet());
 		holder.timeText.setText(conversation.getDate_str());
 		return view;

@@ -60,6 +60,9 @@ public class InfoUtil {
 						.getColumnIndex("message_count")));
 				conversation.setRead(cursor.getLong(cursor
 						.getColumnIndex("read")));
+				if(conversation.getCount()==0){
+					Brain.newInstance().setGlobalConversation(conversation);
+				}
 				conversations.add(conversation);
 			} while (cursor.moveToNext());
 		}
@@ -86,7 +89,6 @@ public class InfoUtil {
 
 	public static String getNameByPhoneNum(String phoneNum) {
 		String name = "";
-		Log.i(TAG, "getNameByPhoneNum:" + phoneNum);
 		if (!phoneNum.trim().equals("")) {
 			Uri nameUri = Uri.withAppendedPath(
 					ContactsContract.PhoneLookup.CONTENT_FILTER_URI, phoneNum);
