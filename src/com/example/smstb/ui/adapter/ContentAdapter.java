@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.europa.tool.ToolAdapter;
@@ -15,15 +17,20 @@ import com.example.smstb.R;
 import com.example.smstb.bean.Conversation;
 import com.example.smstb.bean.SMSInfo;
 import com.example.smstb.iinterface.ListInterface;
+import com.example.smstb.ui.activity.MainActivity;
 import com.example.smstb.util.Brain;
 import com.example.smstb.util.InfoUtil;
 
-public class ContentAdapter extends ToolAdapter<Conversation> implements ListInterface{
+public class ContentAdapter extends ToolAdapter<Conversation>{
 
 	LayoutInflater inflater;
-	ViewHolder holder;
+	public ViewHolder holder;
+	MainActivity mainActivity;
+	ListView infosListView;
 	public ContentAdapter(List<Conversation> list, Activity activity) {
 		super(list, activity);
+		this.mainActivity=(MainActivity)activity;
+		infosListView=mainActivity.infosListView;
 	}
 
 	@Override
@@ -37,6 +44,7 @@ public class ContentAdapter extends ToolAdapter<Conversation> implements ListInt
 			holder.amountText=ViewUtil.findText(view,R.id.amount);
 			holder.contentText=ViewUtil.findText(view,R.id.content);
 			holder.timeText=ViewUtil.findText(view,R.id.time);
+			holder.selectedChk=ViewUtil.findChkBox(view,R.id.selectedChk);
 			view.setTag(holder);
 		}else{
 			holder=(ViewHolder) view.getTag();
@@ -52,26 +60,21 @@ public class ContentAdapter extends ToolAdapter<Conversation> implements ListInt
 		}
 		holder.contentText.setText(conversation.getSnippet());
 		holder.timeText.setText(conversation.getDate_str());
+		if(mainActivity.actionMode!=null){
+			holder.selectedChk.setVisibility(View.VISIBLE);
+			holder.selectedChk.setChecked(infosListView.isItemChecked(arg0));
+		}else{
+			holder.selectedChk.setVisibility(View.GONE);
+		}
 		return view;
 	}
-
-	@Override
-	public void deleteItemById(int id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public SMSInfo getInfoByPosition(int position) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
-	class ViewHolder{
+	public class ViewHolder{
 		TextView phoneNumberText;
 		TextView amountText;
 		TextView timeText;
 		TextView contentText;
+		public CheckBox selectedChk;
 	}
 	
 	public String convertToName(String phone){
@@ -84,5 +87,9 @@ public class ContentAdapter extends ToolAdapter<Conversation> implements ListInt
 			}
 		}
 		return name;
+	}
+	
+	public void checkItem(View view,Boolean checked){
+		((ViewHolder)view.getTag()).selectedChk.setChecked(checked);
 	}
 }
