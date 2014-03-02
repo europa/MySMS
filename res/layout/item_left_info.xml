@@ -3,17 +3,29 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_marginBottom="20dp"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="5dp" >
 
     <TextView
         android:id="@+id/contentText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="50dp"
+        android:layout_weight="1"
         android:autoLink="all"
         android:background="@drawable/chat_from"
         android:textColorLink="@color/linkcolor" />
+
+    <CheckBox
+        android:id="@+id/selectedChk"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="gone" />
 
 </LinearLayout>

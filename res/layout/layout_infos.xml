@@ -10,6 +10,7 @@
         android:layout_weight="1"
         android:divider="@android:color/transparent"
         android:dividerHeight="20dp"
+        android:focusableInTouchMode="true"
         android:listSelector="@android:color/transparent" >
     </ListView>
 

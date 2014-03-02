@@ -115,7 +115,7 @@ public class InfoUtil {
 				"thread_id=" + thread_id, null);
 	}
 
-	public static void deleteById(long id) {
+	public static void deleteSMSInfoById(long id) {
 		String deleteUri = "content://sms/";
 		mContext.getContentResolver().delete(Uri.parse(deleteUri), "_id=" + id,
 				null);

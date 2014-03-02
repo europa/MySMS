@@ -124,8 +124,7 @@ public class MainActivity extends InfoBaseActivity {
 				if (actionMode != null) {
 					return false;
 				}
-				infosListView.setSelected(true);
-				startActionMode(multiChoiceModeListener);
+//				startActionMode(multiChoiceModeListener);
 				return false;
 			}
 		});
